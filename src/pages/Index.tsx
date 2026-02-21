@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { DollarSign, TrendingUp, TrendingDown, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp, Moon, Sun } from "lucide-react";
+import { DollarSign, TrendingUp, TrendingDown, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp, Moon, Sun, Pencil } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -26,6 +26,14 @@ function loadTheme(): "light" | "dark" {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+function loadTitle(): string {
+  try {
+    const saved = localStorage.getItem("polytracker-title");
+    if (saved) return saved;
+  } catch {}
+  return "Prediction Wallets";
+}
+
 type ViewMode = "single" | "all" | "compare";
 
 const Index = () => {
@@ -40,6 +48,8 @@ const Index = () => {
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [showPositions, setShowPositions] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">(loadTheme);
+  const [title, setTitle] = useState(loadTitle);
+  const [editingTitle, setEditingTitle] = useState(false);
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
@@ -308,7 +318,36 @@ const Index = () => {
             <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
               <Activity className="h-4 w-4 text-primary" />
             </div>
-            <h1 className="text-base sm:text-lg font-bold tracking-tight">Prediction Wallets</h1>
+            {editingTitle ? (
+              <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                onBlur={() => {
+                  setEditingTitle(false);
+                  localStorage.setItem("polytracker-title", title);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setEditingTitle(false);
+                    localStorage.setItem("polytracker-title", title);
+                  }
+                }}
+                autoFocus
+                className="text-base sm:text-lg font-bold tracking-tight bg-transparent border-b border-primary outline-none"
+              />
+            ) : (
+              <div className="flex items-center gap-2">
+                <h1 className="text-base sm:text-lg font-bold tracking-tight">{title}</h1>
+                <button
+                  type="button"
+                  onClick={() => setEditingTitle(true)}
+                  className="p-1 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Pencil className="h-3 w-3" />
+                </button>
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
             <div className="hidden sm:flex items-center gap-1 text-sm">
