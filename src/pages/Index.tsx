@@ -441,13 +441,14 @@ const Index = () => {
               <button
                 type="button"
                 onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
-                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground flex items-center gap-1"
+                className="px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-foreground hover:text-foreground flex items-center gap-2 border border-border"
                 disabled={wallets.length === 0}
                 aria-label="Export data"
                 aria-expanded={exportDropdownOpen}
               >
                 <Download className="h-4 w-4" />
-                <ChevronDown className="h-3 w-3 hidden sm:block" />
+                <span className="hidden sm:inline font-medium">Export</span>
+                <ChevronDown className="h-3 w-3" />
               </button>
               
               {exportDropdownOpen && (

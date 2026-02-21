@@ -146,7 +146,7 @@ export default function WidgetFAB({
             className="flex items-center gap-2 px-4 py-2 bg-card border border-border text-foreground rounded-full shadow-lg hover:bg-secondary transition-colors whitespace-nowrap"
           >
             <Download className="h-4 w-4" />
-            Export
+            Export Layout
           </button>
           <button
             type="button"
