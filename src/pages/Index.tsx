@@ -1,10 +1,10 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2 } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
 import PositionsTable from "@/components/PositionsTable";
-import { usePositions, useClosedPositions, usePortfolioValue } from "@/hooks/usePolymarket";
+import { usePositions, useClosedPositions, usePortfolioValue, useTrades } from "@/hooks/usePolymarket";
 import type { PolymarketPosition } from "@/lib/polymarket-api";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -31,6 +31,7 @@ const Index = () => {
   const { data: positions, isLoading: posLoading } = usePositions(currentAddress);
   const { data: closedPositions, isLoading: closedPosLoading } = useClosedPositions(currentAddress);
   const { data: valueData, isLoading: valLoading } = usePortfolioValue(currentAddress);
+  const { data: trades, isLoading: tradesLoading } = useTrades(currentAddress);
   
 
   const totalValue = valueData ?? 0;
@@ -73,6 +74,11 @@ const Index = () => {
     return { totalPnl: pnl, winRate: rate, pnlHistory: history };
   }, [positions, closedPositions]);
 
+  const totalVolume = useMemo(() => {
+    if (!trades?.length) return 0;
+    return trades.reduce((sum, t) => sum + (t.size * t.price), 0);
+  }, [trades]);
+
   const mappedPositions = useMemo(() => {
     if (!positions?.length) return [];
     return positions.map((p: PolymarketPosition, i: number) => ({
@@ -88,7 +94,7 @@ const Index = () => {
     }));
   }, [positions]);
 
-  const isLoading = posLoading || valLoading || closedPosLoading;
+  const isLoading = posLoading || valLoading || closedPosLoading || tradesLoading;
 
   const persistWallets = (updated: typeof wallets) => {
     setWallets(updated);
@@ -146,9 +152,9 @@ const Index = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Summary Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {isLoading ? (
-            Array.from({ length: 4 }).map((_, i) => (
+            Array.from({ length: 5 }).map((_, i) => (
               <Skeleton key={i} className="h-24 rounded-xl" />
             ))
           ) : (
@@ -174,6 +180,11 @@ const Index = () => {
                 label="Win Rate"
                 value={`${winRate}%`}
                 icon={<Target className="h-4 w-4" />}
+              />
+              <StatCard
+                label="Total Volume"
+                value={`$${totalVolume.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                icon={<ArrowLeftRight className="h-4 w-4" />}
               />
             </>
           )}
