@@ -11,6 +11,16 @@ Track and compare Polymarket wallet performance.
 - **Drag-to-reorder** - Organize wallet order
 - **On-chain USDC.e** - Live balance from Polygon
 
+## Architecture
+
+```
+Browser → Supabase Edge Function → Polymarket Data API
+                ↓
+          CORS proxy + pagination
+```
+
+The edge function (`supabase/functions/polymarket-proxy`) proxies requests to Polymarket's API, handling CORS and paginating through all closed positions/trades.
+
 ## Setup
 
 ```sh
