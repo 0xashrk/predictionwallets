@@ -506,6 +506,20 @@ const Index = () => {
           )}
         </div>
       </main>
+
+      <footer className="border-t border-border px-6 py-4 mt-8">
+        <div className="max-w-7xl mx-auto text-center text-sm text-muted-foreground">
+          vibed by{" "}
+          <a
+            href="https://x.com/0xashrk"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            0xashrk
+          </a>
+        </div>
+      </footer>
     </div>
   );
 };
