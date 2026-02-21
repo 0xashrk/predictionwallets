@@ -382,7 +382,7 @@ const Index = () => {
     }
 
     return (
-      <div className="stat-card h-full overflow-hidden">
+      <div className="stat-card h-full">
         {content}
       </div>
     );
