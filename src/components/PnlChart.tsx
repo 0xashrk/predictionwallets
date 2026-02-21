@@ -135,25 +135,25 @@ const PnlChart = ({ data, multiData }: PnlChartProps) => {
   const isPositive = periodPnl >= 0;
 
   return (
-    <div className="stat-card h-[380px]">
-      <div className="flex items-center justify-between mb-4">
+    <div className="stat-card h-[340px] sm:h-[380px] flex flex-col">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-0 mb-3 sm:mb-4">
         <div>
-          <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
+          <h3 className="text-xs sm:text-sm font-medium text-muted-foreground uppercase tracking-wider">
             {isCompareMode ? "Comparing PnL" : period === "ALL" ? "Cumulative PnL" : `PnL (${period})`}
           </h3>
           {!isCompareMode && (
-            <p className={`font-mono text-2xl font-bold mt-1 ${isPositive ? "text-gain" : "text-loss"}`}>
+            <p className={`font-mono text-xl sm:text-2xl font-bold mt-0.5 sm:mt-1 ${isPositive ? "text-gain" : "text-loss"}`}>
               {isPositive ? "+" : ""}${periodPnl.toLocaleString()}
             </p>
           )}
         </div>
-        <div className="flex gap-1">
+        <div className="flex gap-0.5 sm:gap-1">
           {PERIODS.map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => setPeriod(p)}
-              className={`px-2.5 py-1 rounded-md text-xs font-medium transition-colors ${
+              className={`px-2 sm:px-2.5 py-1.5 sm:py-1 rounded-md text-xs font-medium transition-colors ${
                 period === p
                   ? "bg-secondary text-foreground"
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary"
@@ -166,7 +166,7 @@ const PnlChart = ({ data, multiData }: PnlChartProps) => {
       </div>
 
       {isCompareMode && multiFilteredData && multiFilteredData.chartData.length >= 2 ? (
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart data={multiFilteredData.chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 14%, 16%)" />
             <XAxis
@@ -199,7 +199,7 @@ const PnlChart = ({ data, multiData }: PnlChartProps) => {
           </LineChart>
         </ResponsiveContainer>
       ) : hasData && filteredData.length >= 2 ? (
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={filteredData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
             <defs>
               <linearGradient id="pnlGradient" x1="0" y1="0" x2="0" y2="1">
@@ -231,7 +231,7 @@ const PnlChart = ({ data, multiData }: PnlChartProps) => {
           </AreaChart>
         </ResponsiveContainer>
       ) : (
-        <div className="h-[280px] flex items-center justify-center text-muted-foreground text-sm">
+        <div className="flex-1 flex items-center justify-center text-muted-foreground text-sm">
           {isCompareMode
             ? "Not enough data to compare"
             : hasData && filteredData.length === 1

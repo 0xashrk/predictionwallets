@@ -289,20 +289,20 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b border-border px-6 py-4">
+      <header className="border-b border-border px-4 sm:px-6 py-3 sm:py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
               <Activity className="h-4 w-4 text-primary" />
             </div>
-            <h1 className="text-lg font-bold tracking-tight">Prediction Wallets</h1>
+            <h1 className="text-base sm:text-lg font-bold tracking-tight">Prediction Wallets</h1>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1 text-sm">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <div className="hidden sm:flex items-center gap-1 text-sm">
               <span className="text-muted-foreground">Viewing:</span>
               <span className="font-medium">{getViewModeLabel()}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="h-2 w-2 rounded-full bg-gain animate-pulse-glow" />
               <span className="text-xs text-muted-foreground font-mono">Live</span>
             </div>
@@ -317,7 +317,7 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Summary Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {isLoading ? (
