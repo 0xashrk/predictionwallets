@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, Wallet } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, Wallet, ChevronDown, ChevronUp } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -32,6 +32,7 @@ const Index = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [showPositions, setShowPositions] = useState(false);
 
   const { walletsData, isLoading } = useMultiWalletData(wallets);
 
@@ -305,7 +306,7 @@ const Index = () => {
             <>
               <StatCard
                 label="Portfolio Value"
-                value={`$${aggregatedData.totalValue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                value={`$${(aggregatedData.totalValue + aggregatedData.totalUsdcBalance).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 icon={<DollarSign className="h-4 w-4" />}
               />
               <StatCard
@@ -492,11 +493,23 @@ const Index = () => {
         </div>
 
         {/* Positions */}
-        {isLoading ? (
-          <Skeleton className="h-[300px] rounded-xl" />
-        ) : (
-          <PositionsTable positions={mappedPositions} />
-        )}
+        <div className="space-y-3">
+          <button
+            type="button"
+            onClick={() => setShowPositions(!showPositions)}
+            className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground font-medium hover:text-foreground transition-colors"
+          >
+            {showPositions ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            Active Positions ({mappedPositions.length})
+          </button>
+          {showPositions && (
+            isLoading ? (
+              <Skeleton className="h-[300px] rounded-xl" />
+            ) : (
+              <PositionsTable positions={mappedPositions} />
+            )
+          )}
+        </div>
       </main>
     </div>
   );
