@@ -38,25 +38,37 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 const PnlChart = ({ data }: PnlChartProps) => {
   const [period, setPeriod] = useState<Period>("ALL");
 
-  const filteredData = useMemo(() => {
-    if (period === "ALL" || data.length === 0) return data;
+  const { filteredData, periodPnl, hasData } = useMemo(() => {
+    if (data.length === 0) {
+      return { filteredData: [], periodPnl: 0, hasData: false };
+    }
+
+    if (period === "ALL") {
+      const lastValue = data[data.length - 1]?.cumulative ?? 0;
+      return { filteredData: data, periodPnl: lastValue, hasData: true };
+    }
 
     const now = Date.now();
     const cutoff = now - PERIOD_MS[period];
     
     const filtered = data.filter(d => d.timestamp >= cutoff);
     
-    if (filtered.length === 0) return data;
+    if (filtered.length === 0) {
+      return { filteredData: [], periodPnl: 0, hasData: false };
+    }
 
     const startCumulative = filtered[0].cumulative - filtered[0].pnl;
-    return filtered.map(d => ({
+    const adjustedData = filtered.map(d => ({
       ...d,
       cumulative: Math.round((d.cumulative - startCumulative) * 100) / 100,
     }));
+    
+    const pnl = adjustedData[adjustedData.length - 1]?.cumulative ?? 0;
+
+    return { filteredData: adjustedData, periodPnl: pnl, hasData: true };
   }, [data, period]);
 
-  const lastValue = filteredData[filteredData.length - 1]?.cumulative ?? 0;
-  const isPositive = lastValue >= 0;
+  const isPositive = periodPnl >= 0;
 
   return (
     <div className="stat-card">
@@ -66,7 +78,7 @@ const PnlChart = ({ data }: PnlChartProps) => {
             {period === "ALL" ? "Cumulative PnL" : `PnL (${period})`}
           </h3>
           <p className={`font-mono text-2xl font-bold mt-1 ${isPositive ? "text-gain" : "text-loss"}`}>
-            {isPositive ? "+" : ""}${lastValue.toLocaleString()}
+            {isPositive ? "+" : ""}${periodPnl.toLocaleString()}
           </p>
         </div>
         <div className="flex gap-1">
@@ -87,37 +99,45 @@ const PnlChart = ({ data }: PnlChartProps) => {
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={280}>
-        <AreaChart data={filteredData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
-          <defs>
-            <linearGradient id="pnlGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={isPositive ? "hsl(160, 60%, 45%)" : "hsl(0, 72%, 55%)"} stopOpacity={0.3} />
-              <stop offset="100%" stopColor={isPositive ? "hsl(160, 60%, 45%)" : "hsl(0, 72%, 55%)"} stopOpacity={0} />
-            </linearGradient>
-          </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 14%, 16%)" />
-          <XAxis
-            dataKey="date"
-            tick={{ fontSize: 11, fill: "hsl(215, 15%, 50%)" }}
-            axisLine={{ stroke: "hsl(220, 14%, 16%)" }}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fontSize: 11, fill: "hsl(215, 15%, 50%)" }}
-            axisLine={false}
-            tickLine={false}
-            tickFormatter={(v) => `$${v}`}
-          />
-          <Tooltip content={<CustomTooltip />} />
-          <Area
-            type="monotone"
-            dataKey="cumulative"
-            stroke={isPositive ? "hsl(160, 60%, 45%)" : "hsl(0, 72%, 55%)"}
-            strokeWidth={2}
-            fill="url(#pnlGradient)"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
+      {hasData && filteredData.length >= 2 ? (
+        <ResponsiveContainer width="100%" height={280}>
+          <AreaChart data={filteredData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+            <defs>
+              <linearGradient id="pnlGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={isPositive ? "hsl(160, 60%, 45%)" : "hsl(0, 72%, 55%)"} stopOpacity={0.3} />
+                <stop offset="100%" stopColor={isPositive ? "hsl(160, 60%, 45%)" : "hsl(0, 72%, 55%)"} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 14%, 16%)" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 11, fill: "hsl(215, 15%, 50%)" }}
+              axisLine={{ stroke: "hsl(220, 14%, 16%)" }}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: "hsl(215, 15%, 50%)" }}
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={(v) => `$${v}`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Area
+              type="monotone"
+              dataKey="cumulative"
+              stroke={isPositive ? "hsl(160, 60%, 45%)" : "hsl(0, 72%, 55%)"}
+              strokeWidth={2}
+              fill="url(#pnlGradient)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      ) : (
+        <div className="h-[280px] flex items-center justify-center text-muted-foreground text-sm">
+          {hasData && filteredData.length === 1 
+            ? `Only 1 data point for ${period}` 
+            : `No closed positions in the last ${period}`}
+        </div>
+      )}
     </div>
   );
 };
