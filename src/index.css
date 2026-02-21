@@ -137,7 +137,7 @@
   }
 
   .stat-card {
-    @apply rounded-xl border border-border bg-card p-5 transition-all duration-200;
+    @apply rounded-xl border border-border bg-card p-3 sm:p-5 transition-all duration-200;
   }
 
   .stat-card:hover {

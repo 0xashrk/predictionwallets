@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp, Moon, Sun } from "lucide-react";
+import { DollarSign, TrendingUp, TrendingDown, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp, Moon, Sun } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -67,17 +67,28 @@ const Index = () => {
     let totalWinning = 0;
     let totalVolume = 0;
     let totalUsdcBalance = 0;
+    let grossProfit = 0;
+    let grossLoss = 0;
     const allPositions: PolymarketPosition[] = [];
 
     for (const w of selected) {
       totalValue += w.value;
-      totalRealizedPnl += w.closedPositions.reduce((s, p) => s + (p.realizedPnl ?? 0), 0);
       totalOpenPnl += w.positions.reduce((s, p) => s + (p.cashPnl ?? 0), 0);
       totalClosedPositions += w.closedPositions.length;
-      totalWinning += w.closedPositions.filter((p) => (p.realizedPnl ?? 0) > 0).length;
       totalVolume += w.trades.reduce((s, t) => s + t.size * t.price, 0);
       totalUsdcBalance += w.usdcBalance;
       allPositions.push(...w.positions);
+      
+      for (const p of w.closedPositions) {
+        const pnl = p.realizedPnl ?? 0;
+        totalRealizedPnl += pnl;
+        if (pnl > 0) {
+          grossProfit += pnl;
+          totalWinning++;
+        } else {
+          grossLoss += Math.abs(pnl);
+        }
+      }
     }
 
     const totalPnl = totalRealizedPnl + totalOpenPnl;
@@ -90,6 +101,8 @@ const Index = () => {
       winRate,
       totalVolume,
       totalUsdcBalance,
+      grossProfit,
+      grossLoss,
       positions: allPositions,
     };
   }, [selectedIndices, walletsData]);
@@ -319,29 +332,35 @@ const Index = () => {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Summary Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4">
           {isLoading ? (
-            Array.from({ length: 5 }).map((_, i) => (
-              <Skeleton key={i} className="h-24 rounded-xl" />
+            Array.from({ length: 7 }).map((_, i) => (
+              <Skeleton key={i} className="h-20 sm:h-24 rounded-xl" />
             ))
           ) : (
             <>
               <StatCard
-                label="Portfolio Value"
-                value={`$${(aggregatedData.totalValue + aggregatedData.totalUsdcBalance).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                label="Portfolio"
+                value={`$${(aggregatedData.totalValue + aggregatedData.totalUsdcBalance).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
                 icon={<DollarSign className="h-4 w-4" />}
               />
               <StatCard
-                label="All-Time PnL"
-                value={`$${aggregatedData.totalPnl.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                change={`${aggregatedData.totalPnl >= 0 ? "+" : ""}$${aggregatedData.totalPnl.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                label="Net PnL"
+                value={`${aggregatedData.totalPnl >= 0 ? "+" : ""}$${aggregatedData.totalPnl.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
                 positive={aggregatedData.totalPnl >= 0}
                 icon={<TrendingUp className="h-4 w-4" />}
               />
               <StatCard
-                label="Closed Positions"
-                value={String(aggregatedData.totalClosedPositions)}
-                icon={<BarChart3 className="h-4 w-4" />}
+                label="Won"
+                value={`+$${aggregatedData.grossProfit.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+                positive={true}
+                icon={<TrendingUp className="h-4 w-4" />}
+              />
+              <StatCard
+                label="Lost"
+                value={`-$${aggregatedData.grossLoss.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
+                positive={false}
+                icon={<TrendingDown className="h-4 w-4" />}
               />
               <StatCard
                 label="Win Rate"
@@ -349,9 +368,14 @@ const Index = () => {
                 icon={<Target className="h-4 w-4" />}
               />
               <StatCard
-                label="Total Volume"
-                value={`$${aggregatedData.totalVolume.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                label="Volume"
+                value={`$${aggregatedData.totalVolume.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
                 icon={<ArrowLeftRight className="h-4 w-4" />}
+              />
+              <StatCard
+                label="Trades"
+                value={String(aggregatedData.totalClosedPositions)}
+                icon={<BarChart3 className="h-4 w-4" />}
               />
             </>
           )}
