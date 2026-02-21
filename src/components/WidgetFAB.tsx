@@ -36,10 +36,10 @@ export default function WidgetFAB({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `widget-layout-${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `polytracker-customisation-${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Layout exported");
+    toast.success("Customisation exported");
     setIsOpen(false);
   };
 
@@ -56,10 +56,10 @@ export default function WidgetFAB({
       try {
         const data = JSON.parse(event.target?.result as string);
         onImport(data);
-        toast.success("Layout imported");
+        toast.success("Customisation imported");
         setIsOpen(false);
       } catch {
-        toast.error("Invalid layout file");
+        toast.error("Invalid customisation file");
       }
     };
     reader.readAsText(file);
@@ -218,7 +218,7 @@ export default function WidgetFAB({
             className="flex items-center gap-2 px-4 py-2 bg-card border border-border text-foreground rounded-full shadow-lg hover:bg-secondary transition-colors whitespace-nowrap"
           >
             <Download className="h-4 w-4" />
-            Export Layout
+            Export Customisation
           </button>
           <button
             type="button"
