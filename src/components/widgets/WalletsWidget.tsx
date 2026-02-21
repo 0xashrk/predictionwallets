@@ -173,18 +173,18 @@ export default function WalletsWidget({
               onChange={(e) => setNewAddress(e.target.value)}
               className="w-full bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none"
             />
+            <input
+              type="text"
+              placeholder="Name (optional)"
+              value={newLabel}
+              onChange={(e) => setNewLabel(e.target.value)}
+              className="w-full bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
+            />
             <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Name (optional)"
-                value={newLabel}
-                onChange={(e) => setNewLabel(e.target.value)}
-                className="flex-1 bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-              />
               <button
                 type="button"
                 onClick={handleAddWallet}
-                className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+                className="flex-1 bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
               >
                 Add
               </button>

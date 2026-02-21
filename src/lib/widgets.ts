@@ -25,8 +25,7 @@ export type WidgetType =
   | "stat-trades"
   | "wallets"
   | "pnl-chart"
-  | "positions"
-  | "export";
+  | "positions";
 
 export interface WidgetConfig {
   id: WidgetType;
@@ -167,19 +166,6 @@ export const WIDGET_REGISTRY: Record<WidgetType, WidgetConfig> = {
     defaultH: 6,
     minW: 6,
     minH: 4,
-  },
-  export: {
-    id: "export",
-    label: "Export",
-    description: "Download trade history as CSV or JSON",
-    icon: Download,
-    category: "panel",
-    defaultW: 4,
-    defaultH: 4,
-    minW: 3,
-    minH: 3,
-    maxW: 6,
-    maxH: 6,
   },
 };
 

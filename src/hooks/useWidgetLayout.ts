@@ -22,7 +22,16 @@ function loadStoredState(): StoredWidgetState {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (parsed.layouts && parsed.activeWidgets) {
-        return parsed;
+        const migratedActiveWidgets = parsed.activeWidgets.filter((w: string) => w !== "export");
+        const migratedLayouts = {
+          lg: parsed.layouts.lg.filter((l: LayoutItem) => l.i !== "export"),
+          md: parsed.layouts.md.filter((l: LayoutItem) => l.i !== "export"),
+          sm: parsed.layouts.sm.filter((l: LayoutItem) => l.i !== "export"),
+        };
+        return {
+          layouts: migratedLayouts,
+          activeWidgets: migratedActiveWidgets,
+        };
       }
     }
   } catch {}

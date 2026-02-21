@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout/legacy";
-import { Activity, Moon, Sun, Pencil } from "lucide-react";
+import { Activity, Moon, Sun, Pencil, Download, ChevronDown } from "lucide-react";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 import { useMultiWalletData } from "@/hooks/useMultiWalletData";
@@ -22,7 +22,7 @@ import {
 import WalletsWidget from "@/components/widgets/WalletsWidget";
 import ChartWidget from "@/components/widgets/ChartWidget";
 import PositionsWidget from "@/components/widgets/PositionsWidget";
-import ExportWidget from "@/components/widgets/ExportWidget";
+import { exportWalletData } from "@/lib/exportData";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
@@ -62,6 +62,7 @@ const Index = () => {
   const [theme, setTheme] = useState<"light" | "dark">(loadTheme);
   const [title, setTitle] = useState(loadTitle);
   const [editingTitle, setEditingTitle] = useState(false);
+  const [exportDropdownOpen, setExportDropdownOpen] = useState(false);
   const titleInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -371,14 +372,6 @@ const Index = () => {
           );
         case "positions":
           return <PositionsWidget positions={mappedPositions} isLoading={isLoading} />;
-        case "export":
-          return (
-            <ExportWidget
-              wallets={wallets}
-              walletsData={walletsData}
-              selectedWallet={selectedWallet}
-            />
-          );
         default:
           return null;
       }
@@ -443,6 +436,87 @@ const Index = () => {
               <span className="h-2 w-2 rounded-full bg-gain animate-pulse-glow" />
               <span className="text-xs text-muted-foreground font-mono">Live</span>
             </div>
+            
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
+                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground flex items-center gap-1"
+                disabled={wallets.length === 0}
+                aria-label="Export data"
+                aria-expanded={exportDropdownOpen}
+              >
+                <Download className="h-4 w-4" />
+                <ChevronDown className="h-3 w-3 hidden sm:block" />
+              </button>
+              
+              {exportDropdownOpen && (
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-40 cursor-default"
+                    onClick={() => setExportDropdownOpen(false)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') setExportDropdownOpen(false);
+                    }}
+                    aria-label="Close export menu"
+                    tabIndex={-1}
+                  />
+                  <div className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-card shadow-lg z-50">
+                    <div className="p-2 space-y-1">
+                      <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
+                        Export Trades
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("trades-csv", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                      >
+                        Trades as CSV
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("trades-json", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                      >
+                        Trades as JSON
+                      </button>
+                      
+                      <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-t border-border mt-2 pt-2">
+                        Export Closed Positions
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("positions-csv", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                      >
+                        Positions as CSV
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("positions-json", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                      >
+                        Positions as JSON
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            
             <button
               type="button"
               onClick={toggleTheme}
