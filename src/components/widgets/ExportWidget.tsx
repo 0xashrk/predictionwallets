@@ -128,85 +128,48 @@ export default function ExportWidget({ wallets, walletsData, selectedWallet }: E
   };
 
   return (
-    <div className="h-full flex flex-col p-4 space-y-4">
-      <div>
-        <h3 className="text-sm font-medium mb-3">Export Trade History</h3>
-        
-        <div className="space-y-3">
-          <div>
-            <label className="text-xs text-muted-foreground mb-2 block">Format</label>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setFormat("csv")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
-                  format === "csv"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-foreground hover:bg-secondary/80"
-                }`}
-              >
-                <FileText className="h-4 w-4" />
-                CSV
-              </button>
-              <button
-                type="button"
-                onClick={() => setFormat("json")}
-                className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm transition-colors ${
-                  format === "json"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-foreground hover:bg-secondary/80"
-                }`}
-              >
-                <FileJson className="h-4 w-4" />
-                JSON
-              </button>
-            </div>
-          </div>
-
-          <div>
-            <label className="text-xs text-muted-foreground mb-2 block">Scope</label>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setScope("current")}
-                className={`flex-1 px-3 py-2 rounded-md text-sm transition-colors ${
-                  scope === "current"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-foreground hover:bg-secondary/80"
-                }`}
-              >
-                Current Wallet
-              </button>
-              <button
-                type="button"
-                onClick={() => setScope("all")}
-                className={`flex-1 px-3 py-2 rounded-md text-sm transition-colors ${
-                  scope === "all"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-foreground hover:bg-secondary/80"
-                }`}
-              >
-                All Wallets
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="h-full flex flex-col justify-center items-center p-4 space-y-3">
+      <div className="flex gap-2 w-full">
+        <button
+          type="button"
+          onClick={() => {
+            setFormat("csv");
+            setScope("current");
+            exportData();
+          }}
+          className="flex-1 flex flex-col items-center gap-1 px-3 py-3 rounded-md bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
+        >
+          <FileText className="h-5 w-5" />
+          <span className="text-xs">CSV</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setFormat("json");
+            setScope("current");
+            exportData();
+          }}
+          className="flex-1 flex flex-col items-center gap-1 px-3 py-3 rounded-md bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
+        >
+          <FileJson className="h-5 w-5" />
+          <span className="text-xs">JSON</span>
+        </button>
       </div>
 
-      <button
-        type="button"
-        onClick={exportData}
-        className="flex items-center justify-center gap-2 px-4 py-3 bg-primary text-primary-foreground rounded-md font-medium hover:bg-primary/90 transition-colors"
-      >
-        <Download className="h-4 w-4" />
-        Export {format.toUpperCase()}
-      </button>
+      <div className="w-full h-px bg-border" />
 
-      <div className="text-xs text-muted-foreground">
-        {scope === "current" 
-          ? `Exporting data for: ${wallets[selectedWallet]?.label || "No wallet selected"}`
-          : `Exporting data for all ${wallets.length} wallet${wallets.length !== 1 ? "s" : ""}`
-        }
+      <div className="flex gap-2 w-full">
+        <button
+          type="button"
+          onClick={() => {
+            setScope("all");
+            exportData();
+          }}
+          className="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md text-xs bg-secondary hover:bg-primary hover:text-primary-foreground transition-colors"
+        >
+          <Download className="h-4 w-4" />
+          All Wallets
+        </button>
       </div>
     </div>
   );
