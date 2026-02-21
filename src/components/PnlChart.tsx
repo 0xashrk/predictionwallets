@@ -1,9 +1,16 @@
 import { useState, useMemo } from "react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis, Line, LineChart, Legend } from "recharts";
 import type { PnlDataPoint } from "@/lib/mock-data";
+
+interface MultiWalletData {
+  label: string;
+  color: string;
+  data: PnlDataPoint[];
+}
 
 interface PnlChartProps {
   data: PnlDataPoint[];
+  multiData?: MultiWalletData[];
 }
 
 type Period = "1H" | "12H" | "24H" | "1W" | "1M" | "3M" | "ALL";
@@ -22,26 +29,37 @@ const PERIOD_MS: Record<Period, number> = {
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
-  const val = payload[0].value;
-  const isPositive = val >= 0;
 
   return (
     <div className="rounded-lg border border-border bg-card px-3 py-2 shadow-xl">
       <p className="text-xs text-muted-foreground mb-1">{label}</p>
-      <p className={`font-mono text-sm font-bold ${isPositive ? "text-gain" : "text-loss"}`}>
-        {isPositive ? "+" : ""}${val.toLocaleString()}
-      </p>
+      {payload.map((entry: any, i: number) => {
+        const val = entry.value;
+        const isPositive = val >= 0;
+        return (
+          <div key={i} className="flex items-center gap-2">
+            {payload.length > 1 && (
+              <span
+                className="w-2 h-2 rounded-full"
+                style={{ backgroundColor: entry.color }}
+              />
+            )}
+            <p className={`font-mono text-sm font-bold ${isPositive ? "text-gain" : "text-loss"}`}>
+              {isPositive ? "+" : ""}${val.toLocaleString()}
+            </p>
+          </div>
+        );
+      })}
     </div>
   );
 };
 
-const PnlChart = ({ data }: PnlChartProps) => {
+const PnlChart = ({ data, multiData }: PnlChartProps) => {
   const [period, setPeriod] = useState<Period>("ALL");
+  const isCompareMode = multiData && multiData.length > 1;
 
   const { filteredData, periodPnl, hasData } = useMemo(() => {
-    if (data.length === 0) {
-      return { filteredData: [], periodPnl: 0, hasData: false };
-    }
+    if (data.length === 0) return { filteredData: [], periodPnl: 0, hasData: false };
 
     if (period === "ALL") {
       const lastValue = data[data.length - 1]?.cumulative ?? 0;
@@ -50,23 +68,69 @@ const PnlChart = ({ data }: PnlChartProps) => {
 
     const now = Date.now();
     const cutoff = now - PERIOD_MS[period];
-    
-    const filtered = data.filter(d => d.timestamp >= cutoff);
-    
+    const filtered = data.filter((d) => d.timestamp >= cutoff);
+
     if (filtered.length === 0) {
       return { filteredData: [], periodPnl: 0, hasData: false };
     }
 
     const startCumulative = filtered[0].cumulative - filtered[0].pnl;
-    const adjustedData = filtered.map(d => ({
+    const adjusted = filtered.map((d) => ({
       ...d,
       cumulative: Math.round((d.cumulative - startCumulative) * 100) / 100,
     }));
-    
-    const pnl = adjustedData[adjustedData.length - 1]?.cumulative ?? 0;
 
-    return { filteredData: adjustedData, periodPnl: pnl, hasData: true };
+    return { filteredData: adjusted, periodPnl: adjusted[adjusted.length - 1]?.cumulative ?? 0, hasData: true };
   }, [data, period]);
+
+  const multiFilteredData = useMemo(() => {
+    if (!isCompareMode || !multiData) return null;
+
+    const filterByPeriod = (inputData: PnlDataPoint[]) => {
+      if (inputData.length === 0) return [];
+      if (period === "ALL") return inputData;
+
+      const now = Date.now();
+      const cutoff = now - PERIOD_MS[period];
+      const filtered = inputData.filter((d) => d.timestamp >= cutoff);
+      if (filtered.length === 0) return [];
+
+      const startCumulative = filtered[0].cumulative - filtered[0].pnl;
+      return filtered.map((d) => ({
+        ...d,
+        cumulative: Math.round((d.cumulative - startCumulative) * 100) / 100,
+      }));
+    };
+
+    const allDates = new Set<string>();
+    const walletData: { label: string; color: string; dataMap: Map<string, number> }[] = [];
+
+    for (const w of multiData) {
+      const filtered = filterByPeriod(w.data);
+      const dataMap = new Map<string, number>();
+      for (const d of filtered) {
+        allDates.add(d.date);
+        dataMap.set(d.date, d.cumulative);
+      }
+      walletData.push({ label: w.label, color: w.color, dataMap });
+    }
+
+    const sortedDates = Array.from(allDates).sort((a, b) => {
+      const dateA = new Date(a + ", 2024").getTime();
+      const dateB = new Date(b + ", 2024").getTime();
+      return dateA - dateB;
+    });
+
+    const chartData = sortedDates.map((date) => {
+      const point: Record<string, string | number> = { date };
+      for (const w of walletData) {
+        point[w.label] = w.dataMap.get(date) ?? 0;
+      }
+      return point;
+    });
+
+    return { chartData, wallets: walletData };
+  }, [multiData, period, isCompareMode]);
 
   const isPositive = periodPnl >= 0;
 
@@ -75,11 +139,13 @@ const PnlChart = ({ data }: PnlChartProps) => {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
-            {period === "ALL" ? "Cumulative PnL" : `PnL (${period})`}
+            {isCompareMode ? "Comparing PnL" : period === "ALL" ? "Cumulative PnL" : `PnL (${period})`}
           </h3>
-          <p className={`font-mono text-2xl font-bold mt-1 ${isPositive ? "text-gain" : "text-loss"}`}>
-            {isPositive ? "+" : ""}${periodPnl.toLocaleString()}
-          </p>
+          {!isCompareMode && (
+            <p className={`font-mono text-2xl font-bold mt-1 ${isPositive ? "text-gain" : "text-loss"}`}>
+              {isPositive ? "+" : ""}${periodPnl.toLocaleString()}
+            </p>
+          )}
         </div>
         <div className="flex gap-1">
           {PERIODS.map((p) => (
@@ -99,7 +165,40 @@ const PnlChart = ({ data }: PnlChartProps) => {
         </div>
       </div>
 
-      {hasData && filteredData.length >= 2 ? (
+      {isCompareMode && multiFilteredData && multiFilteredData.chartData.length >= 2 ? (
+        <ResponsiveContainer width="100%" height={280}>
+          <LineChart data={multiFilteredData.chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(220, 14%, 16%)" />
+            <XAxis
+              dataKey="date"
+              tick={{ fontSize: 11, fill: "hsl(215, 15%, 50%)" }}
+              axisLine={{ stroke: "hsl(220, 14%, 16%)" }}
+              tickLine={false}
+            />
+            <YAxis
+              tick={{ fontSize: 11, fill: "hsl(215, 15%, 50%)" }}
+              axisLine={false}
+              tickLine={false}
+              tickFormatter={(v) => `$${v}`}
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend
+              wrapperStyle={{ fontSize: "12px" }}
+              formatter={(value) => <span className="text-muted-foreground">{value}</span>}
+            />
+            {multiFilteredData.wallets.map((w) => (
+              <Line
+                key={w.label}
+                type="monotone"
+                dataKey={w.label}
+                stroke={w.color}
+                strokeWidth={2}
+                dot={false}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      ) : hasData && filteredData.length >= 2 ? (
         <ResponsiveContainer width="100%" height={280}>
           <AreaChart data={filteredData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
             <defs>
@@ -133,8 +232,10 @@ const PnlChart = ({ data }: PnlChartProps) => {
         </ResponsiveContainer>
       ) : (
         <div className="h-[280px] flex items-center justify-center text-muted-foreground text-sm">
-          {hasData && filteredData.length === 1 
-            ? `Only 1 data point for ${period}` 
+          {isCompareMode
+            ? "Not enough data to compare"
+            : hasData && filteredData.length === 1
+            ? `Only 1 data point for ${period}`
             : `No closed positions in the last ${period}`}
         </div>
       )}
