@@ -1,5 +1,5 @@
 import { useQueries } from "@tanstack/react-query";
-import { fetchPositions, fetchClosedPositions, fetchValue, fetchTrades } from "@/lib/polymarket-api";
+import { fetchPositions, fetchClosedPositions, fetchValue, fetchTrades, fetchUsdcBalance } from "@/lib/polymarket-api";
 import type { PolymarketPosition, PolymarketClosedPosition, PolymarketTrade } from "@/lib/polymarket-api";
 
 interface WalletData {
@@ -9,6 +9,7 @@ interface WalletData {
   closedPositions: PolymarketClosedPosition[];
   value: number;
   trades: PolymarketTrade[];
+  usdcBalance: number;
   isLoading: boolean;
 }
 
@@ -49,6 +50,15 @@ export function useMultiWalletData(wallets: { address: string; label: string }[]
     })),
   });
 
+  const usdcQueries = useQueries({
+    queries: wallets.map((w) => ({
+      queryKey: ["polygon", "usdc-balance", w.address],
+      queryFn: () => fetchUsdcBalance(w.address),
+      enabled: !!w.address,
+      staleTime: 30_000,
+    })),
+  });
+
   const walletsData: WalletData[] = wallets.map((w, i) => ({
     address: w.address,
     label: w.label,
@@ -56,11 +66,13 @@ export function useMultiWalletData(wallets: { address: string; label: string }[]
     closedPositions: closedQueries[i]?.data ?? [],
     value: valueQueries[i]?.data ?? 0,
     trades: tradesQueries[i]?.data ?? [],
+    usdcBalance: usdcQueries[i]?.data ?? 0,
     isLoading:
       positionsQueries[i]?.isLoading ||
       closedQueries[i]?.isLoading ||
       valueQueries[i]?.isLoading ||
       tradesQueries[i]?.isLoading ||
+      usdcQueries[i]?.isLoading ||
       false,
   }));
 

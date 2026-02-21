@@ -95,3 +95,28 @@ export interface PolymarketTrade {
 export async function fetchTrades(address: string): Promise<PolymarketTrade[]> {
   return fetchPolymarket("trades", address);
 }
+
+const POLYGON_RPC = "https://rpc.ankr.com/polygon";
+const USDC_E_ADDRESS = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
+
+export async function fetchUsdcBalance(address: string): Promise<number> {
+  const paddedAddress = address.toLowerCase().replace("0x", "").padStart(64, "0");
+  const data = `0x70a08231${paddedAddress}`;
+
+  const res = await fetch(POLYGON_RPC, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      jsonrpc: "2.0",
+      method: "eth_call",
+      params: [{ to: USDC_E_ADDRESS, data }, "latest"],
+      id: 1,
+    }),
+  });
+
+  const json = await res.json();
+  if (json.error) return 0;
+  
+  const balance = parseInt(json.result, 16);
+  return balance / 1e6;
+}

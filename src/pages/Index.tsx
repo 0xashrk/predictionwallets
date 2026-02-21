@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, Wallet } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -50,6 +50,7 @@ const Index = () => {
     let totalClosedPositions = 0;
     let totalWinning = 0;
     let totalVolume = 0;
+    let totalUsdcBalance = 0;
     const allPositions: PolymarketPosition[] = [];
 
     for (const w of selected) {
@@ -59,6 +60,7 @@ const Index = () => {
       totalClosedPositions += w.closedPositions.length;
       totalWinning += w.closedPositions.filter((p) => (p.realizedPnl ?? 0) > 0).length;
       totalVolume += w.trades.reduce((s, t) => s + t.size * t.price, 0);
+      totalUsdcBalance += w.usdcBalance;
       allPositions.push(...w.positions);
     }
 
@@ -71,6 +73,7 @@ const Index = () => {
       totalClosedPositions,
       winRate,
       totalVolume,
+      totalUsdcBalance,
       positions: allPositions,
     };
   }, [selectedIndices, walletsData]);
@@ -293,9 +296,9 @@ const Index = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Summary Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {isLoading ? (
-            Array.from({ length: 5 }).map((_, i) => (
+            Array.from({ length: 6 }).map((_, i) => (
               <Skeleton key={i} className="h-24 rounded-xl" />
             ))
           ) : (
@@ -326,6 +329,11 @@ const Index = () => {
                 label="Total Volume"
                 value={`$${aggregatedData.totalVolume.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 icon={<ArrowLeftRight className="h-4 w-4" />}
+              />
+              <StatCard
+                label="USDC.e Balance"
+                value={`$${aggregatedData.totalUsdcBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                icon={<Wallet className="h-4 w-4" />}
               />
             </>
           )}
