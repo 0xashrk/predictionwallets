@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2 } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -99,7 +99,7 @@ const Index = () => {
   };
 
   const handleRemoveWallet = (index: number) => {
-    const updated = wallets.filter((_, i) => i !== index);
+    const updated = wallets.filter((_: { address: string; label: string }, i: number) => i !== index);
     persistWallets(updated);
     if (updated.length === 0) {
       setSelectedWallet(0);
@@ -108,6 +108,18 @@ const Index = () => {
     } else if (selectedWallet === index) {
       setSelectedWallet(0);
     }
+  };
+
+  const handleRenameWallet = (index: number, newLabel: string) => {
+    const updated = wallets.map((w: { address: string; label: string }, i: number) =>
+      i === index ? { ...w, label: newLabel } : w
+    );
+    persistWallets(updated);
+  };
+
+  const handleRemoveAllWallets = () => {
+    persistWallets([]);
+    setSelectedWallet(0);
   };
 
   return (
@@ -193,16 +205,28 @@ const Index = () => {
               </div>
             )}
 
-            {wallets.map((w, i) => (
+            {wallets.map((w: { address: string; label: string }, i: number) => (
               <WalletCard
                 key={w.address}
                 wallet={w}
                 selected={i === selectedWallet}
                 onClick={() => setSelectedWallet(i)}
                 onRemove={() => handleRemoveWallet(i)}
+                onRename={(newLabel) => handleRenameWallet(i, newLabel)}
                 removable
               />
             ))}
+
+            {wallets.length > 1 && (
+              <button
+                type="button"
+                onClick={handleRemoveAllWallets}
+                className="w-full flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <Trash2 className="h-3 w-3" />
+                Remove all wallets
+              </button>
+            )}
           </div>
           <div className="lg:col-span-2">
             {closedPosLoading ? (
