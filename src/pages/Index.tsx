@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, Wallet, ChevronDown, ChevronUp } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -297,9 +297,9 @@ const Index = () => {
 
       <main className="max-w-7xl mx-auto px-6 py-6 space-y-6">
         {/* Summary Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {isLoading ? (
-            Array.from({ length: 6 }).map((_, i) => (
+            Array.from({ length: 5 }).map((_, i) => (
               <Skeleton key={i} className="h-24 rounded-xl" />
             ))
           ) : (
@@ -330,11 +330,6 @@ const Index = () => {
                 label="Total Volume"
                 value={`$${aggregatedData.totalVolume.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                 icon={<ArrowLeftRight className="h-4 w-4" />}
-              />
-              <StatCard
-                label="USDC.e Balance"
-                value={`$${aggregatedData.totalUsdcBalance.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
-                icon={<Wallet className="h-4 w-4" />}
               />
             </>
           )}
@@ -500,7 +495,7 @@ const Index = () => {
             className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground font-medium hover:text-foreground transition-colors"
           >
             {showPositions ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-            Active Positions ({mappedPositions.length})
+            Active Positions
           </button>
           {showPositions && (
             isLoading ? (
