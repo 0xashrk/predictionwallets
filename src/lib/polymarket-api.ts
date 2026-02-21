@@ -96,7 +96,7 @@ export async function fetchTrades(address: string): Promise<PolymarketTrade[]> {
   return fetchPolymarket("trades", address);
 }
 
-const POLYGON_RPC = "https://rpc.ankr.com/polygon";
+const POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
 const USDC_E_ADDRESS = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
 
 export async function fetchUsdcBalance(address: string): Promise<number> {
