@@ -1,57 +1,31 @@
-# PolyTracker
+# Prediction Wallets
 
-A Polymarket wallet tracking application built with React, TypeScript, and Supabase.
+Track and compare Polymarket wallet performance.
 
 ## Features
 
-- Track multiple Polymarket wallets
-- View portfolio value, PnL, and win rate
-- Cumulative PnL chart visualization
-- Active positions table with real-time data
+- **Multi-wallet tracking** - Add, rename, reorder, and remove wallets
+- **Portfolio stats** - Portfolio value (positions + USDC.e), PnL, win rate, volume
+- **Cumulative PnL chart** - Filterable by 1H, 12H, 24H, 1W, 1M, 3M, ALL
+- **Compare mode** - View aggregate stats across all wallets or compare specific ones
+- **Drag-to-reorder** - Organize wallets in your preferred order
+- **USDC.e balance** - Fetches on-chain balance from Polygon
 
 ## Tech Stack
 
-- Vite
-- TypeScript
-- React
+- Vite + React + TypeScript
 - Tailwind CSS
-- Supabase
+- TanStack Query
 - Recharts
+- Supabase (edge function proxy)
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js (v18+)
-- bun
-
-### Installation
+## Setup
 
 ```sh
-# Install dependencies
 bun install
-
-# Copy environment variables
 cp .env.example .env
-
-# Fill in your Supabase credentials in .env
-```
-
-### Development
-
-```sh
-# Start the dev server (runs on port 3001)
+# Add Supabase credentials to .env
 bun run dev
 ```
 
-### Build
-
-```sh
-bun run build
-```
-
-### Test
-
-```sh
-bun test
-```
+Runs on `http://localhost:3001`
