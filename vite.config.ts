@@ -16,12 +16,17 @@ export default defineConfig(() => ({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "Prediction Wallets",
+        name: "Prediction Wallets - Polymarket Tracker",
         short_name: "PredictWallets",
-        description: "Track and compare Polymarket wallet performance",
+        description: "Free Polymarket wallet tracker. Monitor PnL, win rate, portfolio value, and trading volume. Compare multiple wallets in real-time.",
         theme_color: "#0f1215",
         background_color: "#0f1215",
         display: "standalone",
+        start_url: "/",
+        scope: "/",
+        categories: ["finance", "productivity", "utilities"],
+        lang: "en",
+        dir: "ltr",
         icons: [
           {
             src: "/favicon.svg",
