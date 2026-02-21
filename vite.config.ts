@@ -41,4 +41,7 @@ export default defineConfig(() => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: ["react-grid-layout", "react-grid-layout/legacy"],
+  },
 }));

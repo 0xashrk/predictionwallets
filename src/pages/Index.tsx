@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect, useRef } from "react";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const ReactGridLayout = require("react-grid-layout");
-const { Responsive, WidthProvider } = ReactGridLayout;
+import { Responsive, WidthProvider } from "react-grid-layout/legacy";
 import { Activity, Moon, Sun, Pencil } from "lucide-react";
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 import { useMultiWalletData } from "@/hooks/useMultiWalletData";
 import { useWidgetLayout } from "@/hooks/useWidgetLayout";
 import type { PolymarketPosition } from "@/lib/polymarket-api";
@@ -24,8 +24,6 @@ import ChartWidget from "@/components/widgets/ChartWidget";
 import PositionsWidget from "@/components/widgets/PositionsWidget";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
-
-const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const DEFAULT_WALLETS: { address: string; label: string }[] = [];
 
