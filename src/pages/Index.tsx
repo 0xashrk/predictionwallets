@@ -570,9 +570,22 @@ const Index = () => {
 
       <WidgetFAB
         availableWidgets={getAvailableWidgets()}
+        wallets={wallets}
         onAddWidget={addWidget}
-        onExport={exportLayout}
-        onImport={importLayout}
+        onAddWallet={handleAddWallet}
+        onExport={() => {
+          const layoutData = exportLayout();
+          return {
+            ...layoutData,
+            wallets,
+          };
+        }}
+        onImport={(data) => {
+          importLayout(data);
+          if (data.wallets && data.wallets.length > 0) {
+            persistWallets(data.wallets);
+          }
+        }}
         onReset={resetToDefault}
       />
     </div>

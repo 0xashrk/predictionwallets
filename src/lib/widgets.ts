@@ -226,5 +226,6 @@ export interface WidgetLayoutExport {
   version: 1;
   layouts: WidgetLayouts;
   activeWidgets: WidgetType[];
+  wallets?: { address: string; label: string }[];
   exportedAt: string;
 }
