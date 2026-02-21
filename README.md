@@ -1,15 +1,22 @@
-# Wallet Tracker
+# PolyTracker
 
-A wallet tracking application built with React, TypeScript, and Supabase.
+A Polymarket wallet tracking application built with React, TypeScript, and Supabase.
+
+## Features
+
+- Track multiple Polymarket wallets
+- View portfolio value, PnL, and win rate
+- Cumulative PnL chart visualization
+- Active positions table with real-time data
 
 ## Tech Stack
 
 - Vite
 - TypeScript
 - React
-- shadcn/ui
 - Tailwind CSS
 - Supabase
+- Recharts
 
 ## Getting Started
 
