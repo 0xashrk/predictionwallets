@@ -16,13 +16,13 @@ A wallet tracking application built with React, TypeScript, and Supabase.
 ### Prerequisites
 
 - Node.js (v18+)
-- npm or bun
+- bun
 
 ### Installation
 
 ```sh
 # Install dependencies
-npm install
+bun install
 
 # Copy environment variables
 cp .env.example .env
@@ -33,18 +33,18 @@ cp .env.example .env
 ### Development
 
 ```sh
-# Start the dev server (runs on port 8080)
-npm run dev
+# Start the dev server (runs on port 3001)
+bun run dev
 ```
 
 ### Build
 
 ```sh
-npm run build
+bun run build
 ```
 
 ### Test
 
 ```sh
-npm test
+bun test
 ```
