@@ -135,7 +135,7 @@ const PnlChart = ({ data, multiData }: PnlChartProps) => {
   const isPositive = periodPnl >= 0;
 
   return (
-    <div className="stat-card">
+    <div className="stat-card h-[380px]">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">
