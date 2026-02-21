@@ -6,12 +6,13 @@ interface PnlChartProps {
   data: PnlDataPoint[];
 }
 
-type Period = "1H" | "24H" | "1W" | "1M" | "3M" | "ALL";
+type Period = "1H" | "12H" | "24H" | "1W" | "1M" | "3M" | "ALL";
 
-const PERIODS: Period[] = ["1H", "24H", "1W", "1M", "3M", "ALL"];
+const PERIODS: Period[] = ["1H", "12H", "24H", "1W", "1M", "3M", "ALL"];
 
 const PERIOD_MS: Record<Period, number> = {
   "1H": 60 * 60 * 1000,
+  "12H": 12 * 60 * 60 * 1000,
   "24H": 24 * 60 * 60 * 1000,
   "1W": 7 * 24 * 60 * 60 * 1000,
   "1M": 30 * 24 * 60 * 60 * 1000,
