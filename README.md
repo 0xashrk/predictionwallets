@@ -15,8 +15,6 @@ Track and compare Polymarket wallet performance.
 
 ```sh
 bun install
-cp .env.example .env
-# Add Supabase URL + key to .env
 bun run dev
 ```
 
