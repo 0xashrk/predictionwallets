@@ -1,12 +1,31 @@
-import { useState, useMemo, useEffect } from "react";
-import { DollarSign, TrendingUp, TrendingDown, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp, Moon, Sun, Pencil } from "lucide-react";
-import StatCard from "@/components/StatCard";
-import WalletCard from "@/components/WalletCard";
-import PnlChart from "@/components/PnlChart";
-import PositionsTable from "@/components/PositionsTable";
+import { useState, useMemo, useEffect, useRef } from "react";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const ReactGridLayout = require("react-grid-layout");
+const { Responsive, WidthProvider } = ReactGridLayout;
+import { Activity, Moon, Sun, Pencil } from "lucide-react";
 import { useMultiWalletData } from "@/hooks/useMultiWalletData";
+import { useWidgetLayout } from "@/hooks/useWidgetLayout";
 import type { PolymarketPosition } from "@/lib/polymarket-api";
-import { Skeleton } from "@/components/ui/skeleton";
+import type { WidgetType } from "@/lib/widgets";
+import { GRID_CONFIG, WIDGET_REGISTRY } from "@/lib/widgets";
+import WidgetWrapper from "@/components/WidgetWrapper";
+import WidgetFAB from "@/components/WidgetFAB";
+import {
+  PortfolioWidget,
+  NetPnlWidget,
+  WonWidget,
+  LostWidget,
+  WinRateWidget,
+  VolumeWidget,
+  TradesWidget,
+} from "@/components/widgets/StatWidgets";
+import WalletsWidget from "@/components/widgets/WalletsWidget";
+import ChartWidget from "@/components/widgets/ChartWidget";
+import PositionsWidget from "@/components/widgets/PositionsWidget";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+
+const ResponsiveGridLayout = WidthProvider(Responsive);
 
 const DEFAULT_WALLETS: { address: string; label: string }[] = [];
 
@@ -41,15 +60,23 @@ const Index = () => {
   const [selectedWallet, setSelectedWallet] = useState(0);
   const [viewMode, setViewMode] = useState<ViewMode>("single");
   const [compareWallets, setCompareWallets] = useState<Set<number>>(new Set());
-  const [newAddress, setNewAddress] = useState("");
-  const [newLabel, setNewLabel] = useState("");
-  const [showAdd, setShowAdd] = useState(false);
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
-  const [showPositions, setShowPositions] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">(loadTheme);
   const [title, setTitle] = useState(loadTitle);
   const [editingTitle, setEditingTitle] = useState(false);
+  const titleInputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    layouts,
+    activeWidgets,
+    onLayoutChange,
+    onBreakpointChange,
+    addWidget,
+    removeWidget,
+    resetToDefault,
+    exportLayout,
+    importLayout,
+    getAvailableWidgets,
+  } = useWidgetLayout();
 
   useEffect(() => {
     document.documentElement.classList.remove("light", "dark");
@@ -69,7 +96,7 @@ const Index = () => {
 
   const aggregatedData = useMemo(() => {
     const selected = selectedIndices.map((i) => walletsData[i]).filter(Boolean);
-    
+
     let totalValue = 0;
     let totalRealizedPnl = 0;
     let totalOpenPnl = 0;
@@ -88,7 +115,7 @@ const Index = () => {
       totalVolume += w.trades.reduce((s, t) => s + t.size * t.price, 0);
       totalUsdcBalance += w.usdcBalance;
       allPositions.push(...w.positions);
-      
+
       for (const p of w.closedPositions) {
         const pnl = p.realizedPnl ?? 0;
         totalRealizedPnl += pnl;
@@ -128,7 +155,7 @@ const Index = () => {
       const w = wallets[index];
       const closed = data.closedPositions;
       const sorted = [...closed].sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0));
-      
+
       const byDate = new Map<string, { pnl: number; timestamp: number }>();
       for (const p of sorted) {
         const ts = (p.timestamp ?? 0) * 1000;
@@ -211,44 +238,8 @@ const Index = () => {
     localStorage.setItem("polytracker-wallets", JSON.stringify(updated));
   };
 
-  const handleAddWallet = () => {
-    if (newAddress && newAddress.startsWith("0x") && newAddress.length === 42) {
-      const label = newLabel.trim() || `Wallet ${wallets.length + 1}`;
-      persistWallets([...wallets, { address: newAddress, label }]);
-      setNewAddress("");
-      setNewLabel("");
-      setShowAdd(false);
-    }
-  };
-
-  const handleDragStart = (index: number) => {
-    setDraggedIndex(index);
-  };
-
-  const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    if (draggedIndex !== null && draggedIndex !== index) {
-      setDragOverIndex(index);
-    }
-  };
-
-  const handleDragEnd = () => {
-    if (draggedIndex !== null && dragOverIndex !== null && draggedIndex !== dragOverIndex) {
-      const updated = [...wallets];
-      const [removed] = updated.splice(draggedIndex, 1);
-      updated.splice(dragOverIndex, 0, removed);
-      persistWallets(updated);
-
-      if (selectedWallet === draggedIndex) {
-        setSelectedWallet(dragOverIndex);
-      } else if (draggedIndex < selectedWallet && dragOverIndex >= selectedWallet) {
-        setSelectedWallet(selectedWallet - 1);
-      } else if (draggedIndex > selectedWallet && dragOverIndex <= selectedWallet) {
-        setSelectedWallet(selectedWallet + 1);
-      }
-    }
-    setDraggedIndex(null);
-    setDragOverIndex(null);
+  const handleAddWallet = (address: string, label: string) => {
+    persistWallets([...wallets, { address, label }]);
   };
 
   const handleRemoveWallet = (index: number) => {
@@ -283,6 +274,21 @@ const Index = () => {
     setCompareWallets(new Set());
   };
 
+  const handleReorderWallets = (fromIndex: number, toIndex: number) => {
+    const updated = [...wallets];
+    const [removed] = updated.splice(fromIndex, 1);
+    updated.splice(toIndex, 0, removed);
+    persistWallets(updated);
+
+    if (selectedWallet === fromIndex) {
+      setSelectedWallet(toIndex);
+    } else if (fromIndex < selectedWallet && toIndex >= selectedWallet) {
+      setSelectedWallet(selectedWallet - 1);
+    } else if (fromIndex > selectedWallet && toIndex <= selectedWallet) {
+      setSelectedWallet(selectedWallet + 1);
+    }
+  };
+
   const toggleCompareWallet = (index: number) => {
     setCompareWallets((prev) => {
       const next = new Set(prev);
@@ -304,10 +310,82 @@ const Index = () => {
     }
   };
 
+  const handleToggleViewMode = (mode: ViewMode) => {
+    if (mode === "compare" && viewMode !== "compare") {
+      setCompareWallets(new Set([selectedWallet]));
+    } else if (mode !== "compare") {
+      setCompareWallets(new Set());
+    }
+    setViewMode(mode);
+  };
+
   const getViewModeLabel = () => {
     if (viewMode === "all") return "All Wallets";
     if (viewMode === "compare") return `Comparing ${compareWallets.size} wallets`;
     return wallets[selectedWallet]?.label ?? "Wallet";
+  };
+
+  const renderWidget = (widgetType: WidgetType) => {
+    const config = WIDGET_REGISTRY[widgetType];
+    const isStatWidget = config.category === "stat";
+
+    const content = (() => {
+      switch (widgetType) {
+        case "stat-portfolio":
+          return <PortfolioWidget data={aggregatedData} isLoading={isLoading} />;
+        case "stat-netpnl":
+          return <NetPnlWidget data={aggregatedData} isLoading={isLoading} />;
+        case "stat-won":
+          return <WonWidget data={aggregatedData} isLoading={isLoading} />;
+        case "stat-lost":
+          return <LostWidget data={aggregatedData} isLoading={isLoading} />;
+        case "stat-winrate":
+          return <WinRateWidget data={aggregatedData} isLoading={isLoading} />;
+        case "stat-volume":
+          return <VolumeWidget data={aggregatedData} isLoading={isLoading} />;
+        case "stat-trades":
+          return <TradesWidget data={aggregatedData} isLoading={isLoading} />;
+        case "wallets":
+          return (
+            <WalletsWidget
+              wallets={wallets}
+              selectedWallet={selectedWallet}
+              viewMode={viewMode}
+              compareWallets={compareWallets}
+              onWalletClick={handleWalletClick}
+              onAddWallet={handleAddWallet}
+              onRemoveWallet={handleRemoveWallet}
+              onRenameWallet={handleRenameWallet}
+              onRemoveAllWallets={handleRemoveAllWallets}
+              onReorderWallets={handleReorderWallets}
+              onToggleViewMode={handleToggleViewMode}
+              onToggleCompareWallet={toggleCompareWallet}
+            />
+          );
+        case "pnl-chart":
+          return (
+            <ChartWidget
+              data={combinedPnlHistory}
+              multiData={viewMode !== "single" && pnlHistories.length > 1 ? pnlHistories : undefined}
+              isLoading={isLoading}
+            />
+          );
+        case "positions":
+          return <PositionsWidget positions={mappedPositions} isLoading={isLoading} />;
+        default:
+          return null;
+      }
+    })();
+
+    if (isStatWidget) {
+      return content;
+    }
+
+    return (
+      <div className="stat-card h-full overflow-hidden">
+        {content}
+      </div>
+    );
   };
 
   return (
@@ -320,6 +398,7 @@ const Index = () => {
             </div>
             {editingTitle ? (
               <input
+                ref={titleInputRef}
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -333,7 +412,6 @@ const Index = () => {
                     localStorage.setItem("polytracker-title", title);
                   }
                 }}
-                autoFocus
                 className="text-base sm:text-lg font-bold tracking-tight bg-transparent border-b border-primary outline-none"
               />
             ) : (
@@ -369,239 +447,29 @@ const Index = () => {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-        {/* Summary Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-4">
-          {isLoading ? (
-            Array.from({ length: 7 }).map((_, i) => (
-              <Skeleton key={i} className="h-20 sm:h-24 rounded-xl" />
-            ))
-          ) : (
-            <>
-              <StatCard
-                label="Portfolio"
-                value={`$${(aggregatedData.totalValue + aggregatedData.totalUsdcBalance).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
-                icon={<DollarSign className="h-4 w-4" />}
-              />
-              <StatCard
-                label="Net PnL"
-                value={`${aggregatedData.totalPnl >= 0 ? "+" : ""}$${aggregatedData.totalPnl.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
-                positive={aggregatedData.totalPnl >= 0}
-                icon={<TrendingUp className="h-4 w-4" />}
-              />
-              <StatCard
-                label="Won"
-                value={`+$${aggregatedData.grossProfit.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
-                positive={true}
-                icon={<TrendingUp className="h-4 w-4" />}
-              />
-              <StatCard
-                label="Lost"
-                value={`-$${aggregatedData.grossLoss.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
-                positive={false}
-                icon={<TrendingDown className="h-4 w-4" />}
-              />
-              <StatCard
-                label="Win Rate"
-                value={`${aggregatedData.winRate}%`}
-                icon={<Target className="h-4 w-4" />}
-              />
-              <StatCard
-                label="Volume"
-                value={`$${aggregatedData.totalVolume.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`}
-                icon={<ArrowLeftRight className="h-4 w-4" />}
-              />
-              <StatCard
-                label="Trades"
-                value={String(aggregatedData.totalClosedPositions)}
-                icon={<BarChart3 className="h-4 w-4" />}
-              />
-            </>
-          )}
-        </div>
-
-        {/* Wallets + Chart */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between px-1">
-              <h2 className="text-xs uppercase tracking-wider text-muted-foreground font-medium">Wallets</h2>
-              <div className="flex items-center gap-2">
-                {wallets.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (viewMode === "all") {
-                        setViewMode("single");
-                      } else {
-                        setViewMode("all");
-                        setCompareWallets(new Set());
-                      }
-                    }}
-                    className={`text-xs px-2 py-1 rounded transition-colors ${
-                      viewMode === "all"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                    }`}
-                  >
-                    <Layers className="h-3 w-3 inline mr-1" />
-                    All
-                  </button>
-                )}
-                {wallets.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (viewMode === "compare") {
-                        setViewMode("single");
-                        setCompareWallets(new Set());
-                      } else {
-                        setViewMode("compare");
-                        setCompareWallets(new Set([selectedWallet]));
-                      }
-                    }}
-                    className={`text-xs px-2 py-1 rounded transition-colors ${
-                      viewMode === "compare"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary"
-                    }`}
-                  >
-                    Compare
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={() => setShowAdd(!showAdd)}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showAdd ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                </button>
-              </div>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <ResponsiveGridLayout
+          layouts={layouts}
+          breakpoints={GRID_CONFIG.breakpoints}
+          cols={GRID_CONFIG.cols}
+          rowHeight={GRID_CONFIG.rowHeight}
+          margin={GRID_CONFIG.margin}
+          containerPadding={GRID_CONFIG.containerPadding}
+          onLayoutChange={onLayoutChange}
+          onBreakpointChange={onBreakpointChange}
+          draggableHandle=".widget-drag-handle"
+          isResizable={true}
+          isDraggable={true}
+          useCSSTransforms={true}
+        >
+          {activeWidgets.map((widgetType) => (
+            <div key={widgetType} className="widget-item">
+              <WidgetWrapper widgetType={widgetType} onRemove={removeWidget}>
+                {renderWidget(widgetType)}
+              </WidgetWrapper>
             </div>
-
-            {showAdd && (
-              <div className="stat-card space-y-2">
-                <input
-                  type="text"
-                  placeholder="0x... (wallet address)"
-                  value={newAddress}
-                  onChange={(e) => setNewAddress(e.target.value)}
-                  className="w-full bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none"
-                />
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Name (optional)"
-                    value={newLabel}
-                    onChange={(e) => setNewLabel(e.target.value)}
-                    className="flex-1 bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleAddWallet}
-                    className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {wallets.length === 0 && !showAdd && (
-              <button
-                type="button"
-                onClick={() => setShowAdd(true)}
-                className="stat-card flex flex-col items-center justify-center py-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
-              >
-                <Plus className="h-8 w-8 text-muted-foreground mb-2" />
-                <p className="text-sm font-medium text-foreground">Add your first wallet</p>
-                <p className="text-xs text-muted-foreground mt-1">Track Polymarket positions and PnL</p>
-              </button>
-            )}
-
-            {wallets.map((w: { address: string; label: string }, i: number) => (
-              <div
-                key={w.address}
-                draggable={wallets.length > 1 && viewMode !== "compare"}
-                onDragStart={() => handleDragStart(i)}
-                onDragOver={(e) => handleDragOver(e, i)}
-                onDragEnd={handleDragEnd}
-                className={`flex items-center gap-1 transition-all ${
-                  draggedIndex === i ? "opacity-50" : ""
-                } ${dragOverIndex === i ? "border-t-2 border-primary" : ""}`}
-              >
-                {viewMode === "compare" && (
-                  <input
-                    type="checkbox"
-                    checked={compareWallets.has(i)}
-                    onChange={() => toggleCompareWallet(i)}
-                    className="h-4 w-4 rounded border-border accent-primary"
-                  />
-                )}
-                {wallets.length > 1 && viewMode !== "compare" && (
-                  <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1">
-                    <GripVertical className="h-4 w-4" />
-                  </div>
-                )}
-                <div className="flex-1">
-                  <WalletCard
-                    wallet={w}
-                    selected={
-                      viewMode === "single"
-                        ? i === selectedWallet
-                        : viewMode === "all"
-                        ? true
-                        : compareWallets.has(i)
-                    }
-                    onClick={() => handleWalletClick(i)}
-                    onRemove={() => handleRemoveWallet(i)}
-                    onRename={(label) => handleRenameWallet(i, label)}
-                    removable
-                  />
-                </div>
-              </div>
-            ))}
-
-            {wallets.length > 1 && (
-              <button
-                type="button"
-                onClick={handleRemoveAllWallets}
-                className="w-full flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground hover:text-destructive transition-colors"
-              >
-                <Trash2 className="h-3 w-3" />
-                Remove all wallets
-              </button>
-            )}
-          </div>
-          <div className="lg:col-span-2">
-            {isLoading ? (
-              <Skeleton className="h-[360px] rounded-xl" />
-            ) : (
-              <PnlChart
-                data={combinedPnlHistory}
-                multiData={viewMode !== "single" && pnlHistories.length > 1 ? pnlHistories : undefined}
-              />
-            )}
-          </div>
-        </div>
-
-        {/* Positions */}
-        <div className="space-y-3">
-          <button
-            type="button"
-            onClick={() => setShowPositions(!showPositions)}
-            className="flex items-center gap-2 text-xs uppercase tracking-wider text-muted-foreground font-medium hover:text-foreground transition-colors"
-          >
-            {showPositions ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-            Active Positions
-          </button>
-          {showPositions && (
-            isLoading ? (
-              <Skeleton className="h-[300px] rounded-xl" />
-            ) : (
-              <PositionsTable positions={mappedPositions} />
-            )
-          )}
-        </div>
+          ))}
+        </ResponsiveGridLayout>
       </main>
 
       <footer className="border-t border-border px-6 py-4 mt-8">
@@ -617,6 +485,14 @@ const Index = () => {
           </a>
         </div>
       </footer>
+
+      <WidgetFAB
+        availableWidgets={getAvailableWidgets()}
+        onAddWidget={addWidget}
+        onExport={exportLayout}
+        onImport={importLayout}
+        onReset={resetToDefault}
+      />
     </div>
   );
 };

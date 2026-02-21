@@ -143,4 +143,40 @@
   .stat-card:hover {
     @apply border-muted-foreground/20;
   }
+
+  .widget-item {
+    @apply rounded-xl overflow-hidden;
+  }
+
+  .widget-item > div {
+    @apply h-full;
+  }
+
+  .widget-container {
+    @apply relative h-full;
+  }
+
+  .widget-header {
+    @apply rounded-t-xl;
+  }
+
+  .react-grid-item.react-grid-placeholder {
+    @apply bg-primary/20 rounded-xl;
+  }
+
+  .react-grid-item > .react-resizable-handle {
+    @apply opacity-0 transition-opacity;
+  }
+
+  .react-grid-item:hover > .react-resizable-handle {
+    @apply opacity-100;
+  }
+
+  .react-resizable-handle {
+    @apply bg-primary/30 rounded;
+  }
+
+  .react-resizable-handle::after {
+    border-color: hsl(var(--primary) / 0.5) !important;
+  }
 }
