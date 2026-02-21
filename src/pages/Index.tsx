@@ -437,18 +437,35 @@ const Index = () => {
               <span className="text-xs text-muted-foreground font-mono">Live</span>
             </div>
             
-            <div className="relative">
+            <div className="hidden lg:flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => exportWalletData("trades-csv", wallets, walletsData, selectedIndices)}
+                disabled={wallets.length === 0}
+                className="px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Export Trades CSV
+              </button>
+              <button
+                type="button"
+                onClick={() => exportWalletData("positions-csv", wallets, walletsData, selectedIndices)}
+                disabled={wallets.length === 0}
+                className="px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Export Positions CSV
+              </button>
+            </div>
+            
+            <div className="lg:hidden relative">
               <button
                 type="button"
                 onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
-                className="px-3 py-2 rounded-lg hover:bg-secondary transition-colors text-foreground hover:text-foreground flex items-center gap-2 border border-border"
+                className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
                 disabled={wallets.length === 0}
                 aria-label="Export data"
                 aria-expanded={exportDropdownOpen}
               >
                 <Download className="h-4 w-4" />
-                <span className="hidden sm:inline font-medium">Export</span>
-                <ChevronDown className="h-3 w-3" />
               </button>
               
               {exportDropdownOpen && (
@@ -463,20 +480,17 @@ const Index = () => {
                     aria-label="Close export menu"
                     tabIndex={-1}
                   />
-                  <div className="absolute right-0 mt-2 w-56 rounded-lg border border-border bg-card shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-64 rounded-lg border border-border bg-card shadow-lg z-50">
                     <div className="p-2 space-y-1">
-                      <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground">
-                        Export Trades
-                      </div>
                       <button
                         type="button"
                         onClick={() => {
                           exportWalletData("trades-csv", wallets, walletsData, selectedIndices);
                           setExportDropdownOpen(false);
                         }}
-                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
                       >
-                        Trades as CSV
+                        Export Trades as CSV
                       </button>
                       <button
                         type="button"
@@ -484,23 +498,22 @@ const Index = () => {
                           exportWalletData("trades-json", wallets, walletsData, selectedIndices);
                           setExportDropdownOpen(false);
                         }}
-                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
                       >
-                        Trades as JSON
+                        Export Trades as JSON
                       </button>
                       
-                      <div className="px-2 py-1.5 text-xs font-medium text-muted-foreground border-t border-border mt-2 pt-2">
-                        Export Closed Positions
-                      </div>
+                      <div className="border-t border-border my-1" />
+                      
                       <button
                         type="button"
                         onClick={() => {
                           exportWalletData("positions-csv", wallets, walletsData, selectedIndices);
                           setExportDropdownOpen(false);
                         }}
-                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
                       >
-                        Positions as CSV
+                        Export Positions as CSV
                       </button>
                       <button
                         type="button"
@@ -508,9 +521,9 @@ const Index = () => {
                           exportWalletData("positions-json", wallets, walletsData, selectedIndices);
                           setExportDropdownOpen(false);
                         }}
-                        className="w-full text-left px-2 py-1.5 text-sm rounded hover:bg-secondary transition-colors"
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
                       >
-                        Positions as JSON
+                        Export Positions as JSON
                       </button>
                     </div>
                   </div>

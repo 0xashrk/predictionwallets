@@ -48,7 +48,8 @@ export function exportWalletData(
       const trades = walletData.trades.map(t => ({
         wallet: wallet.label,
         address: wallet.address,
-        market: t.market || "Unknown",
+        market: t.title || t.market || "Unknown",
+        outcome: t.outcome || "Unknown",
         side: t.side || "Unknown",
         size: t.size,
         price: t.price,
