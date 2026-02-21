@@ -29,7 +29,7 @@ export default function WidgetWrapper({ widgetType, onRemove, children }: Widget
           <X className="h-3 w-3" />
         </button>
       </div>
-      <div className={`widget-content flex-1 ${isStatWidget ? "" : "pt-4"}`}>
+      <div className={`widget-content flex-1 min-h-0 ${isStatWidget ? "" : "pt-4"}`}>
         {children}
       </div>
     </div>
