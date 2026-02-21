@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, ChevronUp, ChevronDown } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -26,6 +26,8 @@ const Index = () => {
   const [newAddress, setNewAddress] = useState("");
   const [newLabel, setNewLabel] = useState("");
   const [showAdd, setShowAdd] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const currentAddress = wallets[selectedWallet]?.address ?? "";
 
@@ -112,19 +114,34 @@ const Index = () => {
     }
   };
 
-  const handleMoveWallet = (index: number, direction: "up" | "down") => {
-    const newIndex = direction === "up" ? index - 1 : index + 1;
-    if (newIndex < 0 || newIndex >= wallets.length) return;
-    
-    const updated = [...wallets];
-    [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
-    persistWallets(updated);
-    
-    if (selectedWallet === index) {
-      setSelectedWallet(newIndex);
-    } else if (selectedWallet === newIndex) {
-      setSelectedWallet(index);
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex !== null && draggedIndex !== index) {
+      setDragOverIndex(index);
     }
+  };
+
+  const handleDragEnd = () => {
+    if (draggedIndex !== null && dragOverIndex !== null && draggedIndex !== dragOverIndex) {
+      const updated = [...wallets];
+      const [removed] = updated.splice(draggedIndex, 1);
+      updated.splice(dragOverIndex, 0, removed);
+      persistWallets(updated);
+
+      if (selectedWallet === draggedIndex) {
+        setSelectedWallet(dragOverIndex);
+      } else if (draggedIndex < selectedWallet && dragOverIndex >= selectedWallet) {
+        setSelectedWallet(selectedWallet - 1);
+      } else if (draggedIndex > selectedWallet && dragOverIndex <= selectedWallet) {
+        setSelectedWallet(selectedWallet + 1);
+      }
+    }
+    setDraggedIndex(null);
+    setDragOverIndex(null);
   };
 
   const handleRemoveWallet = (index: number) => {
@@ -250,25 +267,19 @@ const Index = () => {
             )}
 
             {wallets.map((w: { address: string; label: string }, i: number) => (
-              <div key={w.address} className="flex items-center gap-1">
+              <div
+                key={w.address}
+                draggable={wallets.length > 1}
+                onDragStart={() => handleDragStart(i)}
+                onDragOver={(e) => handleDragOver(e, i)}
+                onDragEnd={handleDragEnd}
+                className={`flex items-center gap-1 transition-all ${
+                  draggedIndex === i ? "opacity-50" : ""
+                } ${dragOverIndex === i ? "border-t-2 border-primary" : ""}`}
+              >
                 {wallets.length > 1 && (
-                  <div className="flex flex-col">
-                    <button
-                      type="button"
-                      onClick={() => handleMoveWallet(i, "up")}
-                      disabled={i === 0}
-                      className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <ChevronUp className="h-3.5 w-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleMoveWallet(i, "down")}
-                      disabled={i === wallets.length - 1}
-                      className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <ChevronDown className="h-3.5 w-3.5" />
-                    </button>
+                  <div className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1">
+                    <GripVertical className="h-4 w-4" />
                   </div>
                 )}
                 <div className="flex-1">
