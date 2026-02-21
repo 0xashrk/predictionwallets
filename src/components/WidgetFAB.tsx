@@ -1,12 +1,14 @@
 import { useState, useRef } from "react";
-import { Plus, X, Download, Upload, RotateCcw } from "lucide-react";
+import { Plus, X, Download, Upload, RotateCcw, Wallet } from "lucide-react";
 import type { WidgetType, WidgetLayoutExport } from "@/lib/widgets";
 import { WIDGET_REGISTRY } from "@/lib/widgets";
 import { toast } from "sonner";
 
 interface WidgetFABProps {
   availableWidgets: WidgetType[];
+  wallets: { address: string; label: string }[];
   onAddWidget: (widgetType: WidgetType) => void;
+  onAddWallet: (address: string, label: string) => void;
   onExport: () => WidgetLayoutExport;
   onImport: (data: WidgetLayoutExport) => void;
   onReset: () => void;
@@ -14,13 +16,18 @@ interface WidgetFABProps {
 
 export default function WidgetFAB({
   availableWidgets,
+  wallets,
   onAddWidget,
+  onAddWallet,
   onExport,
   onImport,
   onReset,
 }: WidgetFABProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showWidgetPicker, setShowWidgetPicker] = useState(false);
+  const [showAddWallet, setShowAddWallet] = useState(false);
+  const [newAddress, setNewAddress] = useState("");
+  const [newLabel, setNewLabel] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleExport = () => {
@@ -70,6 +77,20 @@ export default function WidgetFAB({
     setShowWidgetPicker(false);
     setIsOpen(false);
     toast.success(`Added ${WIDGET_REGISTRY[widgetType].label} widget`);
+  };
+
+  const handleAddWallet = () => {
+    if (newAddress && newAddress.startsWith("0x") && newAddress.length === 42) {
+      const label = newLabel.trim() || `Wallet ${wallets.length + 1}`;
+      onAddWallet(newAddress, label);
+      setNewAddress("");
+      setNewLabel("");
+      setShowAddWallet(false);
+      setIsOpen(false);
+      toast.success(`Added wallet: ${label}`);
+    } else {
+      toast.error("Invalid wallet address");
+    }
   };
 
   return (
@@ -130,7 +151,50 @@ export default function WidgetFAB({
         </div>
       )}
 
-      {isOpen && !showWidgetPicker && (
+      {showAddWallet && (
+        <div className="absolute bottom-16 right-0 w-80 bg-card border border-border rounded-lg shadow-xl p-4 space-y-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium">Add Wallet</span>
+            <button
+              type="button"
+              onClick={() => {
+                setShowAddWallet(false);
+                setNewAddress("");
+                setNewLabel("");
+              }}
+              className="p-1 text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <input
+            type="text"
+            placeholder="0x... (wallet address)"
+            value={newAddress}
+            onChange={(e) => setNewAddress(e.target.value)}
+            className="w-full bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none border border-border focus:border-primary"
+          />
+          <input
+            type="text"
+            placeholder="Name (optional)"
+            value={newLabel}
+            onChange={(e) => setNewLabel(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleAddWallet();
+            }}
+            className="w-full bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none border border-border focus:border-primary"
+          />
+          <button
+            type="button"
+            onClick={handleAddWallet}
+            className="w-full bg-primary text-primary-foreground px-4 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+          >
+            Add Wallet
+          </button>
+        </div>
+      )}
+
+      {isOpen && !showWidgetPicker && !showAddWallet && (
         <div className="absolute bottom-16 right-0 flex flex-col gap-2">
           <button
             type="button"
@@ -139,6 +203,14 @@ export default function WidgetFAB({
           >
             <Plus className="h-4 w-4" />
             Add Widget
+          </button>
+          <button
+            type="button"
+            onClick={() => setShowAddWallet(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-card border border-border text-foreground rounded-full shadow-lg hover:bg-secondary transition-colors whitespace-nowrap"
+          >
+            <Wallet className="h-4 w-4" />
+            Add Wallet
           </button>
           <button
             type="button"
@@ -172,14 +244,15 @@ export default function WidgetFAB({
         onClick={() => {
           setIsOpen(!isOpen);
           setShowWidgetPicker(false);
+          setShowAddWallet(false);
         }}
         className={`p-4 rounded-full shadow-lg transition-all ${
-          isOpen
+          isOpen || showAddWallet
             ? "bg-secondary text-foreground rotate-45"
             : "bg-primary text-primary-foreground"
         }`}
       >
-        {isOpen ? <X className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
+        {isOpen || showAddWallet ? <X className="h-6 w-6" /> : <Plus className="h-6 w-6" />}
       </button>
     </div>
   );
