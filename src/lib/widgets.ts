@@ -182,9 +182,9 @@ export const DEFAULT_LAYOUTS: WidgetLayouts = {
     { i: "stat-winrate", x: 8, y: 0, w: 2, h: 2 },
     { i: "stat-volume", x: 10, y: 0, w: 2, h: 2 },
     { i: "stat-trades", x: 12, y: 0, w: 2, h: 2 },
-    { i: "wallets", x: 0, y: 2, w: 4, h: 8 },
-    { i: "pnl-chart", x: 4, y: 2, w: 10, h: 8 },
-    { i: "positions", x: 0, y: 10, w: 14, h: 6 },
+    { i: "wallets", x: 0, y: 2, w: 4, h: 10 },
+    { i: "pnl-chart", x: 4, y: 2, w: 10, h: 10 },
+    { i: "positions", x: 0, y: 12, w: 14, h: 6 },
   ],
   md: [
     { i: "stat-portfolio", x: 0, y: 0, w: 3, h: 2 },
@@ -194,9 +194,9 @@ export const DEFAULT_LAYOUTS: WidgetLayouts = {
     { i: "stat-winrate", x: 0, y: 2, w: 3, h: 2 },
     { i: "stat-volume", x: 3, y: 2, w: 3, h: 2 },
     { i: "stat-trades", x: 6, y: 2, w: 3, h: 2 },
-    { i: "wallets", x: 0, y: 4, w: 4, h: 8 },
-    { i: "pnl-chart", x: 4, y: 4, w: 8, h: 8 },
-    { i: "positions", x: 0, y: 12, w: 12, h: 6 },
+    { i: "wallets", x: 0, y: 4, w: 4, h: 10 },
+    { i: "pnl-chart", x: 4, y: 4, w: 8, h: 10 },
+    { i: "positions", x: 0, y: 14, w: 12, h: 6 },
   ],
   sm: [
     { i: "stat-portfolio", x: 0, y: 0, w: 3, h: 2 },
@@ -206,9 +206,9 @@ export const DEFAULT_LAYOUTS: WidgetLayouts = {
     { i: "stat-winrate", x: 0, y: 4, w: 3, h: 2 },
     { i: "stat-volume", x: 3, y: 4, w: 3, h: 2 },
     { i: "stat-trades", x: 0, y: 6, w: 6, h: 2 },
-    { i: "wallets", x: 0, y: 8, w: 6, h: 6 },
-    { i: "pnl-chart", x: 0, y: 14, w: 6, h: 6 },
-    { i: "positions", x: 0, y: 20, w: 6, h: 6 },
+    { i: "wallets", x: 0, y: 8, w: 6, h: 8 },
+    { i: "pnl-chart", x: 0, y: 16, w: 6, h: 8 },
+    { i: "positions", x: 0, y: 24, w: 6, h: 6 },
   ],
 };
 

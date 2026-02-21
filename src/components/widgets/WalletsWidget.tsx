@@ -105,45 +105,10 @@ export default function WalletsWidget({
               Compare
             </button>
           )}
-          <button
-            type="button"
-            onClick={() => setShowAdd(!showAdd)}
-            className="text-muted-foreground hover:text-foreground transition-colors"
-          >
-            {showAdd ? <X className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-          </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto space-y-3 pr-1">
-        {showAdd && (
-          <div className="stat-card space-y-2">
-            <input
-              type="text"
-              placeholder="0x... (wallet address)"
-              value={newAddress}
-              onChange={(e) => setNewAddress(e.target.value)}
-              className="w-full bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none"
-            />
-            <div className="flex gap-2">
-              <input
-                type="text"
-                placeholder="Name (optional)"
-                value={newLabel}
-                onChange={(e) => setNewLabel(e.target.value)}
-                className="flex-1 bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
-              />
-              <button
-                type="button"
-                onClick={handleAddWallet}
-                className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
-              >
-                Add
-              </button>
-            </div>
-          </div>
-        )}
-
         {wallets.length === 0 && !showAdd && (
           <button
             type="button"
@@ -198,6 +163,56 @@ export default function WalletsWidget({
             </div>
           </div>
         ))}
+
+        {showAdd && (
+          <div className="stat-card space-y-2">
+            <input
+              type="text"
+              placeholder="0x... (wallet address)"
+              value={newAddress}
+              onChange={(e) => setNewAddress(e.target.value)}
+              className="w-full bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none"
+            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Name (optional)"
+                value={newLabel}
+                onChange={(e) => setNewLabel(e.target.value)}
+                className="flex-1 bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
+              />
+              <button
+                type="button"
+                onClick={handleAddWallet}
+                className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+              >
+                Add
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setShowAdd(false);
+                  setNewAddress("");
+                  setNewLabel("");
+                }}
+                className="text-muted-foreground hover:text-foreground px-2 py-2 rounded-md transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {wallets.length > 0 && !showAdd && (
+          <button
+            type="button"
+            onClick={() => setShowAdd(true)}
+            className="w-full flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Plus className="h-3 w-3" />
+            Add wallet
+          </button>
+        )}
 
         {wallets.length > 1 && (
           <button

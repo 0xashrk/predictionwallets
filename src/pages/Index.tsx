@@ -459,6 +459,7 @@ const Index = () => {
           isResizable={true}
           isDraggable={true}
           useCSSTransforms={true}
+          resizeHandles={["se", "s", "e"]}
         >
           {activeWidgets.map((widgetType) => (
             <div key={widgetType} className="widget-item">
