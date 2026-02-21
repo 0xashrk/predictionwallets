@@ -295,7 +295,7 @@ const Index = () => {
             <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
               <Activity className="h-4 w-4 text-primary" />
             </div>
-            <h1 className="text-lg font-bold tracking-tight">Ash's Prediction Wallets</h1>
+            <h1 className="text-lg font-bold tracking-tight">Prediction Wallets</h1>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1 text-sm">
@@ -441,6 +441,18 @@ const Index = () => {
                   </button>
                 </div>
               </div>
+            )}
+
+            {wallets.length === 0 && !showAdd && (
+              <button
+                type="button"
+                onClick={() => setShowAdd(true)}
+                className="stat-card flex flex-col items-center justify-center py-8 text-center cursor-pointer hover:border-primary/50 transition-colors"
+              >
+                <Plus className="h-8 w-8 text-muted-foreground mb-2" />
+                <p className="text-sm font-medium text-foreground">Add your first wallet</p>
+                <p className="text-xs text-muted-foreground mt-1">Track Polymarket positions and PnL</p>
+              </button>
             )}
 
             {wallets.map((w: { address: string; label: string }, i: number) => (
