@@ -22,6 +22,7 @@ import {
 import WalletsWidget from "@/components/widgets/WalletsWidget";
 import ChartWidget from "@/components/widgets/ChartWidget";
 import PositionsWidget from "@/components/widgets/PositionsWidget";
+import ExportWidget from "@/components/widgets/ExportWidget";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 
@@ -370,6 +371,14 @@ const Index = () => {
           );
         case "positions":
           return <PositionsWidget positions={mappedPositions} isLoading={isLoading} />;
+        case "export":
+          return (
+            <ExportWidget
+              wallets={wallets}
+              walletsData={walletsData}
+              selectedWallet={selectedWallet}
+            />
+          );
         default:
           return null;
       }
