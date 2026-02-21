@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight } from "lucide-react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, ChevronUp, ChevronDown } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -24,6 +24,7 @@ const Index = () => {
   const [wallets, setWallets] = useState(loadWallets);
   const [selectedWallet, setSelectedWallet] = useState(0);
   const [newAddress, setNewAddress] = useState("");
+  const [newLabel, setNewLabel] = useState("");
   const [showAdd, setShowAdd] = useState(false);
 
   const currentAddress = wallets[selectedWallet]?.address ?? "";
@@ -103,9 +104,26 @@ const Index = () => {
 
   const handleAddWallet = () => {
     if (newAddress && newAddress.startsWith("0x") && newAddress.length === 42) {
-      persistWallets([...wallets, { address: newAddress, label: `Wallet ${wallets.length + 1}` }]);
+      const label = newLabel.trim() || `Wallet ${wallets.length + 1}`;
+      persistWallets([...wallets, { address: newAddress, label }]);
       setNewAddress("");
+      setNewLabel("");
       setShowAdd(false);
+    }
+  };
+
+  const handleMoveWallet = (index: number, direction: "up" | "down") => {
+    const newIndex = direction === "up" ? index - 1 : index + 1;
+    if (newIndex < 0 || newIndex >= wallets.length) return;
+    
+    const updated = [...wallets];
+    [updated[index], updated[newIndex]] = [updated[newIndex], updated[index]];
+    persistWallets(updated);
+    
+    if (selectedWallet === index) {
+      setSelectedWallet(newIndex);
+    } else if (selectedWallet === newIndex) {
+      setSelectedWallet(index);
     }
   };
 
@@ -204,33 +222,66 @@ const Index = () => {
             </div>
 
             {showAdd && (
-              <div className="stat-card flex gap-2">
+              <div className="stat-card space-y-2">
                 <input
                   type="text"
-                  placeholder="0x..."
+                  placeholder="0x... (wallet address)"
                   value={newAddress}
                   onChange={(e) => setNewAddress(e.target.value)}
-                  className="flex-1 bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none"
+                  className="w-full bg-secondary rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-muted-foreground outline-none"
                 />
-                <button
-                  onClick={handleAddWallet}
-                  className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
-                >
-                  Add
-                </button>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Name (optional)"
+                    value={newLabel}
+                    onChange={(e) => setNewLabel(e.target.value)}
+                    className="flex-1 bg-secondary rounded-md px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddWallet}
+                    className="bg-primary text-primary-foreground px-3 py-2 rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
+                  >
+                    Add
+                  </button>
+                </div>
               </div>
             )}
 
             {wallets.map((w: { address: string; label: string }, i: number) => (
-              <WalletCard
-                key={w.address}
-                wallet={w}
-                selected={i === selectedWallet}
-                onClick={() => setSelectedWallet(i)}
-                onRemove={() => handleRemoveWallet(i)}
-                onRename={(newLabel) => handleRenameWallet(i, newLabel)}
-                removable
-              />
+              <div key={w.address} className="flex items-center gap-1">
+                {wallets.length > 1 && (
+                  <div className="flex flex-col">
+                    <button
+                      type="button"
+                      onClick={() => handleMoveWallet(i, "up")}
+                      disabled={i === 0}
+                      className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleMoveWallet(i, "down")}
+                      disabled={i === wallets.length - 1}
+                      className="p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                    >
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                )}
+                <div className="flex-1">
+                  <WalletCard
+                    wallet={w}
+                    selected={i === selectedWallet}
+                    onClick={() => setSelectedWallet(i)}
+                    onRemove={() => handleRemoveWallet(i)}
+                    onRename={(label) => handleRenameWallet(i, label)}
+                    removable
+                  />
+                </div>
+              </div>
             ))}
 
             {wallets.length > 1 && (
