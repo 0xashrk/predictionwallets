@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { DollarSign, TrendingUp, BarChart3, Target, Activity, Plus, X, Trash2, ArrowLeftRight, GripVertical, Layers, ChevronDown, ChevronUp, Moon, Sun } from "lucide-react";
 import StatCard from "@/components/StatCard";
 import WalletCard from "@/components/WalletCard";
 import PnlChart from "@/components/PnlChart";
@@ -8,9 +8,7 @@ import { useMultiWalletData } from "@/hooks/useMultiWalletData";
 import type { PolymarketPosition } from "@/lib/polymarket-api";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const DEFAULT_WALLETS = [
-  { address: "0xd121F678E88074a00886C2dDAb3a27be46EA495D", label: "Tracked" },
-];
+const DEFAULT_WALLETS: { address: string; label: string }[] = [];
 
 function loadWallets() {
   try {
@@ -18,6 +16,14 @@ function loadWallets() {
     if (saved) return JSON.parse(saved);
   } catch {}
   return DEFAULT_WALLETS;
+}
+
+function loadTheme(): "light" | "dark" {
+  try {
+    const saved = localStorage.getItem("polytracker-theme");
+    if (saved === "light" || saved === "dark") return saved;
+  } catch {}
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 type ViewMode = "single" | "all" | "compare";
@@ -33,6 +39,15 @@ const Index = () => {
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [showPositions, setShowPositions] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">(loadTheme);
+
+  useEffect(() => {
+    document.documentElement.classList.remove("light", "dark");
+    document.documentElement.classList.add(theme);
+    localStorage.setItem("polytracker-theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
 
   const { walletsData, isLoading } = useMultiWalletData(wallets);
 
@@ -291,6 +306,13 @@ const Index = () => {
               <span className="h-2 w-2 rounded-full bg-gain animate-pulse-glow" />
               <span className="text-xs text-muted-foreground font-mono">Live</span>
             </div>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+            >
+              {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </button>
           </div>
         </div>
       </header>
