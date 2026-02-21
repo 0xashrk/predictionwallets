@@ -52,17 +52,22 @@ const Index = () => {
 
     // Build cumulative PnL history from closed positions sorted by timestamp
     const sorted = [...closed].sort((a, b) => (a.timestamp ?? 0) - (b.timestamp ?? 0));
-    const byDate = new Map<string, number>();
+    const byDate = new Map<string, { pnl: number; timestamp: number }>();
     for (const p of sorted) {
-      const date = new Date((p.timestamp ?? 0) * 1000).toLocaleDateString("en-US", { month: "short", day: "numeric" });
-      byDate.set(date, (byDate.get(date) ?? 0) + (p.realizedPnl ?? 0));
+      const ts = (p.timestamp ?? 0) * 1000;
+      const date = new Date(ts).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      const existing = byDate.get(date);
+      byDate.set(date, { 
+        pnl: (existing?.pnl ?? 0) + (p.realizedPnl ?? 0), 
+        timestamp: ts 
+      });
     }
 
-    const history: { date: string; pnl: number; cumulative: number }[] = [];
+    const history: { date: string; pnl: number; cumulative: number; timestamp: number }[] = [];
     let cumulative = 0;
-    for (const [date, pnlVal] of byDate) {
+    for (const [date, { pnl: pnlVal, timestamp }] of byDate) {
       cumulative += pnlVal;
-      history.push({ date, pnl: Math.round(pnlVal * 100) / 100, cumulative: Math.round(cumulative * 100) / 100 });
+      history.push({ date, pnl: Math.round(pnlVal * 100) / 100, cumulative: Math.round(cumulative * 100) / 100, timestamp });
     }
 
     return { totalPnl: pnl, winRate: rate, pnlHistory: history };
@@ -130,7 +135,7 @@ const Index = () => {
             <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
               <Activity className="h-4 w-4 text-primary" />
             </div>
-            <h1 className="text-lg font-bold tracking-tight">PolyTracker</h1>
+            <h1 className="text-lg font-bold tracking-tight">Ash's Prediction Wallets</h1>
           </div>
           <div className="flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-gain animate-pulse-glow" />

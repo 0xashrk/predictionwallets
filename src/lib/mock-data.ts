@@ -24,4 +24,5 @@ export interface PnlDataPoint {
   date: string;
   pnl: number;
   cumulative: number;
+  timestamp: number;
 }
