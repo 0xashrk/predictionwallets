@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --background: 220 20% 7%;
+    --foreground: 210 20% 92%;
+
+    --card: 220 18% 10%;
+    --card-foreground: 210 20% 92%;
+
+    --popover: 220 18% 10%;
+    --popover-foreground: 210 20% 92%;
+
+    --primary: 160 60% 45%;
+    --primary-foreground: 220 20% 7%;
+
+    --secondary: 220 16% 16%;
+    --secondary-foreground: 210 20% 80%;
+
+    --muted: 220 14% 14%;
+    --muted-foreground: 215 15% 50%;
+
+    --accent: 220 16% 18%;
+    --accent-foreground: 210 20% 92%;
+
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 210 40% 98%;
+
+    --gain: 160 60% 45%;
+    --gain-foreground: 160 80% 90%;
+    --loss: 0 72% 55%;
+    --loss-foreground: 0 80% 90%;
+
+    --border: 220 14% 16%;
+    --input: 220 14% 16%;
+    --ring: 160 60% 45%;
+
+    --radius: 0.75rem;
+
+    --chart-1: 160 60% 45%;
+    --chart-2: 200 70% 50%;
+    --chart-3: 280 60% 55%;
+    --chart-4: 30 80% 55%;
+    --chart-5: 340 65% 55%;
+
+    --sidebar-background: 220 18% 8%;
+    --sidebar-foreground: 210 20% 80%;
+    --sidebar-primary: 160 60% 45%;
+    --sidebar-primary-foreground: 220 20% 7%;
+    --sidebar-accent: 220 16% 14%;
+    --sidebar-accent-foreground: 210 20% 92%;
+    --sidebar-border: 220 14% 16%;
+    --sidebar-ring: 160 60% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer components {
+  .glow-green {
+    box-shadow: 0 0 20px -5px hsl(var(--gain) / 0.3);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px -5px hsl(var(--loss) / 0.3);
+  }
+
+  .stat-card {
+    @apply rounded-xl border border-border bg-card p-5 transition-all duration-200;
+  }
+
+  .stat-card:hover {
+    @apply border-muted-foreground/20;
+  }
+}
