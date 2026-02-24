@@ -71,7 +71,7 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
         <div className="rounded-lg p-2 bg-primary/10">
           <Wallet className="h-4 w-4 text-primary" />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 overflow-hidden">
           {isEditing ? (
             <input
               type="text"
@@ -83,12 +83,12 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
               autoFocus
             />
           ) : (
-            <div className="font-semibold text-sm">{wallet.label}</div>
+            <div className="font-semibold text-sm truncate">{wallet.label}</div>
           )}
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs text-muted-foreground">{shortAddress}</span>
+          <div className="flex items-center gap-1">
+            <span className="font-mono text-xs text-muted-foreground truncate">{shortAddress}</span>
             {!isEditing && (
-              <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   type="button"
                   onClick={handleCopyAddress}
