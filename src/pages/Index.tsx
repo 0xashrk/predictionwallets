@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout/legacy";
-import { Activity, Moon, Sun, Pencil, Download, ChevronDown } from "lucide-react";
+import { Activity, Moon, Sun, Pencil, Download, ChevronDown, Settings } from "lucide-react";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 import { useMultiWalletData } from "@/hooks/useMultiWalletData";
@@ -428,6 +428,25 @@ const Index = () => {
             )}
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                const layoutData = exportLayout();
+                const data = { ...layoutData, wallets };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `polytracker-customisation-${new Date().toISOString().split("T")[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+              disabled={wallets.length === 0}
+            >
+              <Settings className="h-3.5 w-3.5" />
+              Export Customisation
+            </button>
             <div className="hidden sm:flex items-center gap-1 text-sm">
               <span className="text-muted-foreground">Viewing:</span>
               <span className="font-medium">{getViewModeLabel()}</span>
@@ -437,23 +456,102 @@ const Index = () => {
               <span className="text-xs text-muted-foreground font-mono">Live</span>
             </div>
             
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:block relative">
               <button
                 type="button"
-                onClick={() => exportWalletData("trades-csv", wallets, walletsData, selectedIndices)}
+                onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={wallets.length === 0}
-                className="px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Export data"
+                aria-expanded={exportDropdownOpen}
               >
-                Export Trades CSV
+                <Download className="h-4 w-4" />
+                Export
+                <ChevronDown className={`h-3 w-3 transition-transform ${exportDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
-              <button
-                type="button"
-                onClick={() => exportWalletData("positions-csv", wallets, walletsData, selectedIndices)}
-                disabled={wallets.length === 0}
-                className="px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Export Positions CSV
-              </button>
+              
+              {exportDropdownOpen && (
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-40 cursor-default"
+                    onClick={() => setExportDropdownOpen(false)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') setExportDropdownOpen(false);
+                    }}
+                    aria-label="Close export menu"
+                    tabIndex={-1}
+                  />
+                  <div className="absolute right-0 mt-2 w-64 rounded-lg border border-border bg-card shadow-lg z-50">
+                    <div className="p-2 space-y-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("trades-csv", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Trades as CSV
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("trades-json", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Trades as JSON
+                      </button>
+                      
+                      <div className="border-t border-border my-1" />
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("positions-csv", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Positions as CSV
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("positions-json", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Positions as JSON
+                      </button>
+                      
+                      <div className="border-t border-border my-1" />
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const layoutData = exportLayout();
+                          const data = { ...layoutData, wallets };
+                          const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = `polytracker-customisation-${new Date().toISOString().split("T")[0]}.json`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Customisation
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             
             <div className="lg:hidden relative">

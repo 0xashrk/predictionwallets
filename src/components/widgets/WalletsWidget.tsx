@@ -108,7 +108,7 @@ export default function WalletsWidget({
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto space-y-3 pr-1">
+      <div className="flex-1 overflow-y-auto overflow-x-hidden space-y-3 pr-1">
         {wallets.length === 0 && !showAdd && (
           <button
             type="button"
