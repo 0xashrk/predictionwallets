@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Responsive, WidthProvider } from "react-grid-layout/legacy";
-import { Activity, Moon, Sun, Pencil, Download, ChevronDown } from "lucide-react";
+import { Activity, Moon, Sun, Pencil, Download, ChevronDown, Settings } from "lucide-react";
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 import { useMultiWalletData } from "@/hooks/useMultiWalletData";
@@ -428,6 +428,25 @@ const Index = () => {
             )}
           </div>
           <div className="flex items-center gap-2 sm:gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                const layoutData = exportLayout();
+                const data = { ...layoutData, wallets };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `polytracker-customisation-${new Date().toISOString().split("T")[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+              }}
+              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs rounded-lg hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground"
+              disabled={wallets.length === 0}
+            >
+              <Settings className="h-3.5 w-3.5" />
+              Export Customisation
+            </button>
             <div className="hidden sm:flex items-center gap-1 text-sm">
               <span className="text-muted-foreground">Viewing:</span>
               <span className="font-medium">{getViewModeLabel()}</span>

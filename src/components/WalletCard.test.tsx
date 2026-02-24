@@ -47,7 +47,7 @@ describe("WalletCard", () => {
       
       render(<WalletCard wallet={mockWallet} />);
       
-      const copyButton = screen.getByTitle("Copy address");
+      const copyButton = screen.getByTitle("Click to copy");
       fireEvent.click(copyButton);
       
       await waitFor(() => {
@@ -61,7 +61,7 @@ describe("WalletCard", () => {
       
       render(<WalletCard wallet={mockWallet} />);
       
-      const copyButton = screen.getByTitle("Copy address");
+      const copyButton = screen.getByTitle("Click to copy");
       fireEvent.click(copyButton);
       
       await waitFor(() => {
@@ -75,7 +75,7 @@ describe("WalletCard", () => {
       
       render(<WalletCard wallet={mockWallet} />);
       
-      const copyButton = screen.getByTitle("Copy address");
+      const copyButton = screen.getByTitle("Click to copy");
       fireEvent.click(copyButton);
       
       await waitFor(() => {
