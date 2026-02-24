@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Wallet, X, Pencil, Check } from "lucide-react";
+import { Wallet, X, Pencil, Check, Copy, ExternalLink } from "lucide-react";
+import { toast } from "sonner";
 
 interface WalletCardProps {
   wallet: { address: string; label: string };
@@ -44,6 +45,20 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
     }
   };
 
+  const handleCopyAddress = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(wallet.address).then(() => {
+      toast.success("Address copied to clipboard");
+    }).catch(() => {
+      toast.error("Failed to copy address");
+    });
+  };
+
+  const handleOpenPredictfolio = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    window.open(`https://predictfolio.com/${wallet.address}`, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <button
       type="button"
@@ -72,6 +87,26 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
           )}
           <div className="font-mono text-xs text-muted-foreground">{shortAddress}</div>
         </div>
+        {!isEditing && (
+          <>
+            <button
+              type="button"
+              onClick={handleCopyAddress}
+              className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+              title="Copy address"
+            >
+              <Copy className="h-3.5 w-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={handleOpenPredictfolio}
+              className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+              title="View on Predictfolio"
+            >
+              <ExternalLink className="h-3.5 w-3.5" />
+            </button>
+          </>
+        )}
         {isEditing ? (
           <button
             type="button"
