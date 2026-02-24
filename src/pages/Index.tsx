@@ -437,23 +437,81 @@ const Index = () => {
               <span className="text-xs text-muted-foreground font-mono">Live</span>
             </div>
             
-            <div className="hidden lg:flex items-center gap-2">
+            <div className="hidden lg:block relative">
               <button
                 type="button"
-                onClick={() => exportWalletData("trades-csv", wallets, walletsData, selectedIndices)}
+                onClick={() => setExportDropdownOpen(!exportDropdownOpen)}
+                className="flex items-center gap-2 px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={wallets.length === 0}
-                className="px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Export data"
+                aria-expanded={exportDropdownOpen}
               >
-                Export Trades CSV
+                <Download className="h-4 w-4" />
+                Export
+                <ChevronDown className={`h-3 w-3 transition-transform ${exportDropdownOpen ? 'rotate-180' : ''}`} />
               </button>
-              <button
-                type="button"
-                onClick={() => exportWalletData("positions-csv", wallets, walletsData, selectedIndices)}
-                disabled={wallets.length === 0}
-                className="px-3 py-1.5 text-sm rounded-lg hover:bg-secondary transition-colors border border-border disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                Export Positions CSV
-              </button>
+              
+              {exportDropdownOpen && (
+                <>
+                  <button
+                    type="button"
+                    className="fixed inset-0 z-40 cursor-default"
+                    onClick={() => setExportDropdownOpen(false)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') setExportDropdownOpen(false);
+                    }}
+                    aria-label="Close export menu"
+                    tabIndex={-1}
+                  />
+                  <div className="absolute right-0 mt-2 w-64 rounded-lg border border-border bg-card shadow-lg z-50">
+                    <div className="p-2 space-y-1">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("trades-csv", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Trades as CSV
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("trades-json", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Trades as JSON
+                      </button>
+                      
+                      <div className="border-t border-border my-1" />
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("positions-csv", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Positions as CSV
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          exportWalletData("positions-json", wallets, walletsData, selectedIndices);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Positions as JSON
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
             
             <div className="lg:hidden relative">
