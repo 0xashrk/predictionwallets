@@ -84,15 +84,15 @@ describe("WalletCard", () => {
     });
   });
 
-  describe("predictfolio link functionality", () => {
-    it("opens predictfolio in new tab on click", () => {
+  describe("polymarket link functionality", () => {
+    it("opens polymarket in new tab on click", () => {
       render(<WalletCard wallet={mockWallet} />);
       
-      const linkButton = screen.getByTitle("View on Predictfolio");
+      const linkButton = screen.getByTitle("View on Polymarket");
       fireEvent.click(linkButton);
       
       expect(mockWindowOpen).toHaveBeenCalledWith(
-        `https://predictfolio.com/${mockWallet.address}`,
+        `https://polymarket.com/${mockWallet.address}`,
         "_blank",
         "noopener,noreferrer"
       );

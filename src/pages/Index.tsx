@@ -508,6 +508,27 @@ const Index = () => {
                       >
                         Export Positions as JSON
                       </button>
+                      
+                      <div className="border-t border-border my-1" />
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const layoutData = exportLayout();
+                          const data = { ...layoutData, wallets };
+                          const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                          const url = URL.createObjectURL(blob);
+                          const a = document.createElement("a");
+                          a.href = url;
+                          a.download = `polytracker-customisation-${new Date().toISOString().split("T")[0]}.json`;
+                          a.click();
+                          URL.revokeObjectURL(url);
+                          setExportDropdownOpen(false);
+                        }}
+                        className="w-full text-left px-3 py-2 text-sm font-medium rounded hover:bg-secondary transition-colors"
+                      >
+                        Export Customisation
+                      </button>
                     </div>
                   </div>
                 </>

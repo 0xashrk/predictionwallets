@@ -54,16 +54,16 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
     });
   };
 
-  const handleOpenPredictfolio = (e: React.MouseEvent) => {
+  const handleOpenPolymarket = (e: React.MouseEvent) => {
     e.stopPropagation();
-    window.open(`https://predictfolio.com/${wallet.address}`, "_blank", "noopener,noreferrer");
+    window.open(`https://polymarket.com/${wallet.address}`, "_blank", "noopener,noreferrer");
   };
 
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`stat-card w-full text-left transition-all duration-200 ${
+      className={`stat-card w-full text-left transition-all duration-200 group ${
         selected ? "border-primary/50 glow-green" : "hover:border-border/80"
       }`}
     >
@@ -85,28 +85,30 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
           ) : (
             <div className="font-semibold text-sm">{wallet.label}</div>
           )}
-          <div className="font-mono text-xs text-muted-foreground">{shortAddress}</div>
+          <div className="flex items-center gap-2">
+            <span className="font-mono text-xs text-muted-foreground">{shortAddress}</span>
+            {!isEditing && (
+              <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <button
+                  type="button"
+                  onClick={handleCopyAddress}
+                  className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+                  title="Copy address"
+                >
+                  <Copy className="h-3 w-3" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleOpenPolymarket}
+                  className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+                  title="View on Polymarket"
+                >
+                  <ExternalLink className="h-3 w-3" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-        {!isEditing && (
-          <>
-            <button
-              type="button"
-              onClick={handleCopyAddress}
-              className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-              title="Copy address"
-            >
-              <Copy className="h-3.5 w-3.5" />
-            </button>
-            <button
-              type="button"
-              onClick={handleOpenPredictfolio}
-              className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
-              title="View on Predictfolio"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-            </button>
-          </>
-        )}
         {isEditing ? (
           <button
             type="button"
@@ -120,7 +122,7 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
             <button
               type="button"
               onClick={handleEdit}
-              className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+              className="p-1 rounded hover:bg-secondary text-muted-foreground hover:text-foreground transition-colors opacity-0 group-hover:opacity-100 transition-opacity"
             >
               <Pencil className="h-3.5 w-3.5" />
             </button>
@@ -130,7 +132,7 @@ const WalletCard = ({ wallet, selected, onClick, onRemove, onRename, removable }
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); onRemove(); }}
-            className="p-1 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors"
+            className="p-1 rounded hover:bg-destructive/20 text-muted-foreground hover:text-destructive transition-colors opacity-0 group-hover:opacity-100 transition-opacity"
           >
             <X className="h-3.5 w-3.5" />
           </button>
