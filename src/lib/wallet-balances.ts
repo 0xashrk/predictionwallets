@@ -5,6 +5,7 @@ export const USDC_E_TOKEN_ADDRESS = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174"
 const WALLET_ADDRESS_REGEX = /^0x[a-fA-F0-9]{40}$/;
 const POLYMARKET_DATA_API = "https://data-api.polymarket.com";
 const POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com";
+const UPSTREAM_FETCH_TIMEOUT_MS = 10_000;
 
 export type SupportedWalletChain = typeof DEFAULT_WALLET_CHAIN;
 export type WalletBalanceSource = "polymarket-value" | "polygon-usdc";
@@ -329,11 +330,33 @@ function roundUsd(value: number): number {
   return Number(value.toFixed(6));
 }
 
+function createFetchTimeoutError(timeoutMs: number): Error {
+  const error = new Error(`Upstream request timed out after ${timeoutMs}ms.`);
+  error.name = "AbortError";
+  return error;
+}
+
+async function fetchWithTimeout(input: string | URL, init?: RequestInit): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => {
+    controller.abort(createFetchTimeoutError(UPSTREAM_FETCH_TIMEOUT_MS));
+  }, UPSTREAM_FETCH_TIMEOUT_MS);
+
+  try {
+    return await fetch(input, {
+      ...init,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function fetchPortfolioValue(walletAddress: string): Promise<number> {
   const url = new URL(`${POLYMARKET_DATA_API}/value`);
   url.searchParams.set("user", walletAddress);
 
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -360,7 +383,7 @@ async function fetchPolygonUsdcBalance(walletAddress: string): Promise<number> {
   const paddedAddress = walletAddress.toLowerCase().replace("0x", "").padStart(64, "0");
   const data = `0x70a08231${paddedAddress}`;
 
-  const response = await fetch(POLYGON_RPC, {
+  const response = await fetchWithTimeout(POLYGON_RPC, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

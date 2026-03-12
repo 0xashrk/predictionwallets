@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   MAX_WALLET_BATCH_SIZE,
@@ -19,6 +19,18 @@ function createDeps(overrides?: Partial<Parameters<typeof getWalletBalance>[1]>)
     ...overrides,
   };
 }
+
+function createAbortError(message: string): Error {
+  const error = new Error(message);
+  error.name = "AbortError";
+  return error;
+}
+
+afterEach(() => {
+  vi.useRealTimers();
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 describe("wallet balances", () => {
   it("returns a normalized balance response for a single wallet", async () => {
@@ -196,6 +208,76 @@ describe("wallet balances", () => {
         ],
       },
     });
+  });
+
+  it("clears fetch timeout timers after successful upstream responses", async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn(async (input: string | URL) => {
+      if (String(input).includes("/value")) {
+        return {
+          ok: true,
+          json: async () => [{ value: 125.5 }],
+        } as Response;
+      }
+
+      return {
+        ok: true,
+        json: async () => ({
+          result: "0x9c6710",
+        }),
+      } as Response;
+    });
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await getWalletBalance({ walletAddress: WALLET_A });
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result.wallet.error).toBeNull();
+    expect(result.wallet.totals.usd).toBe(135.75);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  it("turns timed out upstream fetches into upstream failures without leaking timers", async () => {
+    vi.useFakeTimers();
+
+    const fetchMock = vi.fn(
+      (_input: string | URL, init?: RequestInit) =>
+        new Promise<Response>((_resolve, reject) => {
+          const signal = init?.signal;
+
+          if (signal?.aborted) {
+            reject(signal.reason instanceof Error ? signal.reason : createAbortError("Request aborted."));
+            return;
+          }
+
+          signal?.addEventListener(
+            "abort",
+            () => {
+              reject(signal.reason instanceof Error ? signal.reason : createAbortError("Request aborted."));
+            },
+            { once: true },
+          );
+        }),
+    );
+
+    vi.stubGlobal("fetch", fetchMock);
+
+    const resultPromise = getWalletBalance({ walletAddress: WALLET_A });
+
+    await vi.advanceTimersByTimeAsync(20_000);
+
+    const result = await resultPromise;
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result.wallet.error).toMatchObject({
+      code: "UPSTREAM_FAILURE",
+      message: "All upstream balance sources failed for this wallet.",
+    });
+    expect(result.wallet.error?.sources).toHaveLength(2);
+    expect(result.wallet.error?.sources?.every((source) => source.message.includes("timed out"))).toBe(true);
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it("rejects requests that exceed the maximum unique wallet batch size", async () => {

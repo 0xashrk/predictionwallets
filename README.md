@@ -14,7 +14,7 @@ Track and compare Polymarket wallet performance.
 
 ## Architecture
 
-```
+```text
 Browser → Supabase Edge Function → Polymarket Data API
                 ↓
           CORS proxy + pagination
@@ -49,13 +49,15 @@ Example client configuration:
 {
   "mcpServers": {
     "predictionwallets": {
-      "command": "npm",
-      "args": ["run", "mcp"],
+      "command": "tsx",
+      "args": ["mcp/server.ts"],
       "cwd": "/absolute/path/to/predictionwallets"
     }
   }
 }
 ```
+
+Use the MCP entrypoint directly for client configs so `StdioServerTransport` keeps stdout clean for JSON-RPC. If your client does not resolve local project binaries, point `command` to `/absolute/path/to/predictionwallets/node_modules/.bin/tsx` instead of wrapping the server with `npm run`.
 
 Available tools:
 

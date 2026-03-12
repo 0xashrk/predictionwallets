@@ -1,7 +1,11 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod/v4";
 
-import type { WalletBalanceDependencies } from "@/lib/wallet-balances";
+import type {
+  MultiWalletBalancesResponse,
+  SingleWalletBalanceResponse,
+  WalletBalanceDependencies,
+} from "@/lib/wallet-balances";
 import {
   MAX_WALLET_BATCH_SIZE,
   WalletBalanceValidationError,
@@ -105,16 +109,7 @@ export function createWalletBalanceToolHandlers(dependencies: Partial<WalletBala
     async getWalletBalance(args: { walletAddress: string; chain?: string }) {
       try {
         const response = await getWalletBalance(args, dependencies);
-
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: `Fetched wallet balance for ${response.wallet.walletAddress} on ${response.chain}.`,
-            },
-          ],
-          structuredContent: response,
-        } satisfies McpToolResponse<z.infer<typeof singleWalletBalanceResponseSchema>>;
+        return createSingleWalletToolResponse(response);
       } catch (error) {
         if (error instanceof WalletBalanceValidationError) {
           return createValidationErrorResponse(error);
@@ -127,16 +122,7 @@ export function createWalletBalanceToolHandlers(dependencies: Partial<WalletBala
     async getMultiWalletBalances(args: { walletAddresses: string[]; chain?: string }) {
       try {
         const response = await getMultiWalletBalances(args, dependencies);
-
-        return {
-          content: [
-            {
-              type: "text" as const,
-              text: `Fetched balances for ${response.wallets.length} wallet(s) on ${response.chain}.`,
-            },
-          ],
-          structuredContent: response,
-        } satisfies McpToolResponse<z.infer<typeof multiWalletBalancesResponseSchema>>;
+        return createMultiWalletToolResponse(response);
       } catch (error) {
         if (error instanceof WalletBalanceValidationError) {
           return createValidationErrorResponse(error);
@@ -197,4 +183,67 @@ function createValidationErrorResponse(error: WalletBalanceValidationError) {
       },
     },
   } satisfies McpToolResponse<z.infer<typeof validationErrorResponseSchema>>;
+}
+
+function createSingleWalletToolResponse(response: SingleWalletBalanceResponse) {
+  const walletError = response.wallet.error;
+
+  if (walletError === null) {
+    return createTextToolResponse(
+      response,
+      `Fetched wallet balance for ${response.wallet.walletAddress} on ${response.chain}.`,
+    );
+  }
+
+  if (walletError.code === "PARTIAL_UPSTREAM_FAILURE") {
+    return createTextToolResponse(
+      response,
+      `Fetched partial wallet balance for ${response.wallet.walletAddress} on ${response.chain}. ${walletError.message}`,
+    );
+  }
+
+  return createTextToolResponse(
+    response,
+    `Failed to fetch wallet balance for ${response.wallet.walletAddress} on ${response.chain}. ${walletError.message}`,
+    true,
+  );
+}
+
+function createMultiWalletToolResponse(response: MultiWalletBalancesResponse) {
+  if (response.summary.failed === 0) {
+    return createTextToolResponse(
+      response,
+      `Fetched balances for ${response.wallets.length} wallet(s) on ${response.chain}.`,
+    );
+  }
+
+  if (response.summary.successful === 0) {
+    return createTextToolResponse(
+      response,
+      `Failed to fetch balances for ${response.wallets.length} wallet(s) on ${response.chain}. Every wallet result included an error.`,
+      true,
+    );
+  }
+
+  return createTextToolResponse(
+    response,
+    `Fetched balances for ${response.wallets.length} wallet(s) on ${response.chain} with errors for ${response.summary.failed} wallet(s).`,
+  );
+}
+
+function createTextToolResponse<TStructuredContent>(
+  structuredContent: TStructuredContent,
+  text: string,
+  isError = false,
+): McpToolResponse<TStructuredContent> {
+  return {
+    ...(isError ? { isError: true as const } : {}),
+    content: [
+      {
+        type: "text",
+        text,
+      },
+    ],
+    structuredContent,
+  };
 }
