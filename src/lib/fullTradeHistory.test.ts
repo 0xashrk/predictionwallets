@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildChunkFileName,
+  buildLogKey,
   buildTradeRow,
   buildWalletTopic,
   decodeOrderFilledLog,
@@ -9,6 +11,17 @@ import {
 } from "./fullTradeHistory";
 
 describe("fullTradeHistory", () => {
+  it("builds stable log keys for dedupe", () => {
+    expect(buildLogKey("0xABC", 7)).toBe("0xabc:7");
+    expect(buildLogKey("0xdef", "0x09")).toBe("0xdef:0x09");
+  });
+
+  it("builds chunk filenames from exchange and block range", () => {
+    expect(
+      buildChunkFileName("0x4BfB41d5B3570dEFd03C39A9A4D8dE6BD8B8982E", 100, 250),
+    ).toBe("0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-100-250.json");
+  });
+
   it("pads a wallet into an indexed topic", () => {
     expect(buildWalletTopic("0xd0d6053c3c37e727402d84c14069780d360993aa")).toBe(
       "0x000000000000000000000000d0d6053c3c37e727402d84c14069780d360993aa",

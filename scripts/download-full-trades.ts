@@ -1,7 +1,15 @@
-import { mkdir, writeFile } from "node:fs/promises";
-import { dirname, extname, resolve } from "node:path";
+import {
+  mkdir,
+  readFile,
+  rename,
+  stat,
+  writeFile,
+} from "node:fs/promises";
+import { dirname, extname, join, resolve } from "node:path";
 
 import {
+  buildChunkFileName,
+  buildLogKey,
   buildTradeRow,
   buildWalletTopic,
   decodeOrderFilledLog,
@@ -39,6 +47,9 @@ interface TokenMetadata {
 }
 
 const DEFAULT_RPC_URL = "";
+const DEFAULT_FETCH_TIMEOUT_MS = 60_000;
+const DEFAULT_RETRIES = 4;
+
 let rpcId = 0;
 
 function parseArgs(argv: string[]): CliOptions {
@@ -99,7 +110,9 @@ function parseArgs(argv: string[]): CliOptions {
   const normalizedWallet = wallet.toLowerCase();
   const normalizedOutput =
     output ||
-    `./artifacts/${normalizedWallet}-full-trades-${new Date().toISOString().slice(0, 10)}.json`;
+    `./artifacts/${normalizedWallet}-full-trades-${new Date()
+      .toISOString()
+      .slice(0, 10)}.json`;
 
   if (!Number.isFinite(chunkSize) || chunkSize <= 0) {
     throw new Error("Chunk size must be a positive number");
@@ -129,7 +142,36 @@ Options:
   --no-metadata      Skip Gamma token metadata enrichment`);
 }
 
-async function rpcCall<T>(rpcUrl: string, method: string, params: unknown[]): Promise<T> {
+function delay(ms: number): Promise<void> {
+  return new Promise((resolveDelay) => {
+    setTimeout(resolveDelay, ms);
+  });
+}
+
+function extractErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+function parseProviderHint(error: unknown): { fromBlock: number; toBlock: number } | null {
+  const match = extractErrorMessage(error).match(
+    /Try with this block range \[(0x[0-9a-fA-F]+), (0x[0-9a-fA-F]+)\]/,
+  );
+  if (!match) {
+    return null;
+  }
+
+  return {
+    fromBlock: Number(BigInt(match[1])),
+    toBlock: Number(BigInt(match[2])),
+  };
+}
+
+async function rpcCall<T>(
+  rpcUrl: string,
+  method: string,
+  params: unknown[],
+  attempt = 1,
+): Promise<T> {
   const payload: RpcPayload = {
     jsonrpc: "2.0",
     id: ++rpcId,
@@ -137,24 +179,41 @@ async function rpcCall<T>(rpcUrl: string, method: string, params: unknown[]): Pr
     params,
   };
 
-  const response = await fetch(rpcUrl, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(payload),
-  });
+  try {
+    const response = await fetch(rpcUrl, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(DEFAULT_FETCH_TIMEOUT_MS),
+    });
 
-  if (!response.ok) {
-    throw new Error(`RPC HTTP ${response.status}: ${await response.text()}`);
+    if (!response.ok) {
+      throw new Error(`RPC HTTP ${response.status}: ${await response.text()}`);
+    }
+
+    const body = (await response.json()) as { error?: unknown; result?: T };
+    if (body.error) {
+      const message =
+        typeof body.error === "string"
+          ? body.error
+          : body.error &&
+              typeof body.error === "object" &&
+              "message" in body.error &&
+              typeof body.error.message === "string"
+            ? body.error.message
+            : JSON.stringify(body.error);
+      throw new Error(`RPC ${method} failed: ${message}`);
+    }
+
+    return body.result as T;
+  } catch (error) {
+    if (attempt >= DEFAULT_RETRIES) {
+      throw error;
+    }
+
+    await delay(500 * 2 ** (attempt - 1));
+    return rpcCall<T>(rpcUrl, method, params, attempt + 1);
   }
-
-  const body = await response.json();
-  if (body.error) {
-    const message =
-      typeof body.error === "string" ? body.error : body.error.message || JSON.stringify(body.error);
-    throw new Error(`RPC ${method} failed: ${message}`);
-  }
-
-  return body.result as T;
 }
 
 async function getLatestBlock(rpcUrl: string): Promise<number> {
@@ -162,12 +221,23 @@ async function getLatestBlock(rpcUrl: string): Promise<number> {
   return Number(BigInt(hex));
 }
 
-async function hasContractCode(rpcUrl: string, address: string, blockNumber: number): Promise<boolean> {
-  const code = await rpcCall<string>(rpcUrl, "eth_getCode", [address, toHex(blockNumber)]);
+async function hasContractCode(
+  rpcUrl: string,
+  address: string,
+  blockNumber: number,
+): Promise<boolean> {
+  const code = await rpcCall<string>(rpcUrl, "eth_getCode", [
+    address,
+    toHex(blockNumber),
+  ]);
   return code !== "0x";
 }
 
-async function findDeploymentBlock(rpcUrl: string, address: string, latestBlock: number): Promise<number> {
+async function findDeploymentBlock(
+  rpcUrl: string,
+  address: string,
+  latestBlock: number,
+): Promise<number> {
   let low = 0;
   let high = latestBlock;
 
@@ -208,9 +278,34 @@ async function fetchOrderFilledLogs(
       throw error;
     }
 
-    const midpoint = Math.floor((fromBlock + toBlock) / 2);
-    const left = await fetchOrderFilledLogs(rpcUrl, exchange, fromBlock, midpoint, walletTopic);
-    const right = await fetchOrderFilledLogs(rpcUrl, exchange, midpoint + 1, toBlock, walletTopic);
+    const providerHint = parseProviderHint(error);
+    const midpoint =
+      providerHint &&
+      providerHint.fromBlock >= fromBlock &&
+      providerHint.toBlock < toBlock
+        ? providerHint.toBlock
+        : Math.floor((fromBlock + toBlock) / 2);
+
+    console.log(
+      `  splitting ${exchange} blocks ${fromBlock}-${toBlock} after error: ${extractErrorMessage(
+        error,
+      )}`,
+    );
+
+    const left = await fetchOrderFilledLogs(
+      rpcUrl,
+      exchange,
+      fromBlock,
+      midpoint,
+      walletTopic,
+    );
+    const right = await fetchOrderFilledLogs(
+      rpcUrl,
+      exchange,
+      midpoint + 1,
+      toBlock,
+      walletTopic,
+    );
     return left.concat(right);
   }
 }
@@ -221,17 +316,23 @@ async function getBlockTimestamp(
   cache: Map<number, number>,
 ): Promise<number> {
   const cached = cache.get(blockNumber);
-  if (cached) {
+  if (cached != null) {
     return cached;
   }
 
-  const block = await rpcCall<{ timestamp: string }>(rpcUrl, "eth_getBlockByNumber", [toHex(blockNumber), false]);
+  const block = await rpcCall<{ timestamp: string }>(
+    rpcUrl,
+    "eth_getBlockByNumber",
+    [toHex(blockNumber), false],
+  );
   const timestamp = Number(BigInt(block.timestamp));
   cache.set(blockNumber, timestamp);
   return timestamp;
 }
 
-async function fetchTokenMetadata(tokenIds: string[]): Promise<Map<string, TokenMetadata>> {
+async function fetchTokenMetadata(
+  tokenIds: string[],
+): Promise<Map<string, TokenMetadata>> {
   const tokenMetadata = new Map<string, TokenMetadata>();
 
   for (let index = 0; index < tokenIds.length; index += 50) {
@@ -242,7 +343,9 @@ async function fetchTokenMetadata(tokenIds: string[]): Promise<Map<string, Token
 
     const response = await fetch(url);
     if (!response.ok) {
-      throw new Error(`Gamma metadata request failed: HTTP ${response.status}`);
+      throw new Error(
+        `Gamma metadata request failed: HTTP ${response.status}`,
+      );
     }
 
     const markets = (await response.json()) as Array<Record<string, unknown>>;
@@ -252,7 +355,10 @@ async function fetchTokenMetadata(tokenIds: string[]): Promise<Map<string, Token
 
       marketTokenIds.forEach((tokenId, offset) => {
         tokenMetadata.set(tokenId, {
-          conditionId: typeof market.conditionId === "string" ? market.conditionId : undefined,
+          conditionId:
+            typeof market.conditionId === "string"
+              ? market.conditionId
+              : undefined,
           title:
             typeof market.question === "string"
               ? market.question
@@ -271,11 +377,24 @@ async function fetchTokenMetadata(tokenIds: string[]): Promise<Map<string, Token
   return tokenMetadata;
 }
 
-function enrichTrades(trades: FullTradeRow[], metadata: Map<string, TokenMetadata>): FullTradeRow[] {
+function enrichTrades(
+  trades: FullTradeRow[],
+  metadata: Map<string, TokenMetadata>,
+): FullTradeRow[] {
   return trades.map((trade) => ({
     ...trade,
     ...metadata.get(trade.asset),
   }));
+}
+
+function sortTrades(trades: FullTradeRow[]): FullTradeRow[] {
+  return trades.sort((left, right) => {
+    if (left.blockNumber !== right.blockNumber) {
+      return left.blockNumber - right.blockNumber;
+    }
+
+    return left.logIndex - right.logIndex;
+  });
 }
 
 function toCsv(trades: FullTradeRow[]): string {
@@ -302,7 +421,11 @@ function toCsv(trades: FullTradeRow[]): string {
 
   const escape = (value: unknown) => {
     const stringValue = value == null ? "" : String(value);
-    if (stringValue.includes(",") || stringValue.includes("\"") || stringValue.includes("\n")) {
+    if (
+      stringValue.includes(",") ||
+      stringValue.includes("\"") ||
+      stringValue.includes("\n")
+    ) {
       return `"${stringValue.replaceAll("\"", "\"\"")}"`;
     }
     return stringValue;
@@ -310,7 +433,9 @@ function toCsv(trades: FullTradeRow[]): string {
 
   return [
     headers.join(","),
-    ...trades.map((trade) => headers.map((header) => escape(trade[header])).join(",")),
+    ...trades.map((trade) =>
+      headers.map((header) => escape(trade[header])).join(","),
+    ),
   ].join("\n");
 }
 
@@ -327,6 +452,132 @@ async function writeOutput(outputPath: string, trades: FullTradeRow[]) {
   return absolutePath;
 }
 
+async function fileExists(path: string): Promise<boolean> {
+  try {
+    await stat(path);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function getPartsDirectory(outputPath: string): string {
+  return `${resolve(outputPath)}.parts`;
+}
+
+async function scanChunkTrades(
+  options: CliOptions,
+  exchange: string,
+  fromBlock: number,
+  toBlock: number,
+  walletTopic: string,
+  blockTimestampCache: Map<number, number>,
+): Promise<FullTradeRow[]> {
+  const logs = await fetchOrderFilledLogs(
+    options.rpcUrl,
+    exchange,
+    fromBlock,
+    toBlock,
+    walletTopic,
+  );
+
+  console.log(`  ${exchange} blocks ${fromBlock}-${toBlock}: ${logs.length} fills`);
+
+  const sortedLogs = [...logs].sort((left, right) => {
+    const leftBlock = Number(BigInt(left.blockNumber));
+    const rightBlock = Number(BigInt(right.blockNumber));
+    if (leftBlock !== rightBlock) {
+      return leftBlock - rightBlock;
+    }
+
+    return Number(BigInt(left.logIndex)) - Number(BigInt(right.logIndex));
+  });
+
+  const trades: FullTradeRow[] = [];
+  for (const log of sortedLogs) {
+    const decoded = decodeOrderFilledLog(log);
+    const timestamp = await getBlockTimestamp(
+      options.rpcUrl,
+      decoded.blockNumber,
+      blockTimestampCache,
+    );
+    trades.push(buildTradeRow(decoded, timestamp));
+  }
+
+  return trades;
+}
+
+async function writeChunkTrades(
+  partPath: string,
+  trades: FullTradeRow[],
+): Promise<void> {
+  const tempPath = `${partPath}.tmp`;
+  await writeFile(tempPath, JSON.stringify(trades), "utf8");
+  await rename(tempPath, partPath);
+}
+
+async function scanToChunkFiles(
+  options: CliOptions,
+  startBlock: number,
+  latestBlock: number,
+  walletTopic: string,
+): Promise<string[]> {
+  const partsDir = getPartsDirectory(options.output);
+  await mkdir(partsDir, { recursive: true });
+
+  const blockTimestampCache = new Map<number, number>();
+  const partPaths: string[] = [];
+
+  for (const exchange of POLYMARKET_EXCHANGE_ADDRESSES) {
+    for (let from = startBlock; from <= latestBlock; from += options.chunkSize) {
+      const to = Math.min(latestBlock, from + options.chunkSize - 1);
+      const partPath = join(partsDir, buildChunkFileName(exchange, from, to));
+      partPaths.push(partPath);
+
+      if (await fileExists(partPath)) {
+        console.log(
+          `  skipping ${exchange} blocks ${from}-${to}: chunk already saved`,
+        );
+        continue;
+      }
+
+      const trades = await scanChunkTrades(
+        options,
+        exchange,
+        from,
+        to,
+        walletTopic,
+        blockTimestampCache,
+      );
+      await writeChunkTrades(partPath, trades);
+      console.log(`  wrote ${trades.length} trades to ${partPath}`);
+    }
+  }
+
+  return partPaths;
+}
+
+async function loadTradesFromParts(
+  partPaths: string[],
+): Promise<FullTradeRow[]> {
+  const tradeMap = new Map<string, FullTradeRow>();
+
+  for (const partPath of partPaths) {
+    if (!(await fileExists(partPath))) {
+      throw new Error(`Missing chunk file: ${partPath}`);
+    }
+
+    const trades = JSON.parse(
+      await readFile(partPath, "utf8"),
+    ) as FullTradeRow[];
+    for (const trade of trades) {
+      tradeMap.set(buildLogKey(trade.transactionHash, trade.logIndex), trade);
+    }
+  }
+
+  return sortTrades(Array.from(tradeMap.values()));
+}
+
 async function main() {
   const options = parseArgs(process.argv.slice(2));
   const latestBlock = options.toBlock ?? (await getLatestBlock(options.rpcUrl));
@@ -340,53 +591,33 @@ async function main() {
       : [];
   const startBlock = options.fromBlock ?? Math.min(...deploymentBlocks);
   const walletTopic = buildWalletTopic(options.wallet);
-  const blockTimestampCache = new Map<number, number>();
-  const logMap = new Map<string, RpcLog>();
 
   console.log(
     `Scanning Polymarket fills for ${options.wallet} from block ${startBlock} to ${latestBlock}...`,
   );
 
-  for (const exchange of POLYMARKET_EXCHANGE_ADDRESSES) {
-    for (let from = startBlock; from <= latestBlock; from += options.chunkSize) {
-      const to = Math.min(latestBlock, from + options.chunkSize - 1);
-      const logs = await fetchOrderFilledLogs(options.rpcUrl, exchange, from, to, walletTopic);
-      console.log(`  ${exchange} blocks ${from}-${to}: ${logs.length} fills`);
-      for (const log of logs) {
-        logMap.set(`${log.transactionHash.toLowerCase()}:${log.logIndex}`, log);
-      }
-    }
-  }
-
-  const rawLogs = Array.from(logMap.values()).sort((left, right) => {
-    const leftBlock = Number(BigInt(left.blockNumber));
-    const rightBlock = Number(BigInt(right.blockNumber));
-    if (leftBlock !== rightBlock) {
-      return leftBlock - rightBlock;
-    }
-
-    return Number(BigInt(left.logIndex)) - Number(BigInt(right.logIndex));
-  });
-
-  const trades: FullTradeRow[] = [];
-  for (const log of rawLogs) {
-    const decoded = decodeOrderFilledLog(log);
-    const timestamp = await getBlockTimestamp(options.rpcUrl, decoded.blockNumber, blockTimestampCache);
-    trades.push(buildTradeRow(decoded, timestamp));
-  }
-
+  const partPaths = await scanToChunkFiles(
+    options,
+    startBlock,
+    latestBlock,
+    walletTopic,
+  );
+  const trades = await loadTradesFromParts(partPaths);
   const enrichedTrades = options.metadata
     ? enrichTrades(
         trades,
-        await fetchTokenMetadata(Array.from(new Set(trades.map((trade) => trade.asset)))),
+        await fetchTokenMetadata(
+          Array.from(new Set(trades.map((trade) => trade.asset))),
+        ),
       )
     : trades;
   const outputPath = await writeOutput(options.output, enrichedTrades);
 
   console.log(`Saved ${enrichedTrades.length} trades to ${outputPath}`);
+  console.log(`Chunk cache retained in ${getPartsDirectory(options.output)}`);
 }
 
 main().catch((error) => {
-  console.error(error instanceof Error ? error.message : String(error));
+  console.error(error instanceof Error ? error.stack || error.message : String(error));
   process.exit(1);
 });

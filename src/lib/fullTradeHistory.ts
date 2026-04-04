@@ -53,6 +53,18 @@ export interface FullTradeRow {
   icon?: string;
 }
 
+export function buildLogKey(transactionHash: string, logIndex: string | number): string {
+  return `${transactionHash.toLowerCase()}:${String(logIndex).toLowerCase()}`;
+}
+
+export function buildChunkFileName(
+  exchange: string,
+  fromBlock: number,
+  toBlock: number,
+): string {
+  return `${exchange.toLowerCase()}-${fromBlock}-${toBlock}.json`;
+}
+
 function ensureHexAddress(address: string): string {
   if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
     throw new Error(`Invalid wallet address: ${address}`);

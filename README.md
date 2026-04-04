@@ -32,6 +32,7 @@ npm run download:full-trades -- --wallet 0xYOUR_PROXY_WALLET --output ./artifact
 ```
 
 The downloader scans Polymarket `OrderFilled` logs directly on Polygon, enriches token IDs from Gamma, and writes the raw on-chain fills as JSON or CSV.
+It also checkpoints per block range under `<output>.parts/`, so reruns resume from completed chunks instead of starting from zero after an RPC timeout.
 
 ## Setup
 
