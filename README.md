@@ -17,12 +17,21 @@ Track and compare Polymarket wallet performance.
 ```text
 Browser → Supabase Edge Function → Polymarket Data API
                 ↓
-          CORS proxy + pagination
+          CORS proxy + recent pagination
 
 MCP Client → MCP Server → Polymarket Data API + Polygon RPC
 ```
 
-The edge function (`supabase/functions/polymarket-proxy`) proxies requests to Polymarket's API, handling CORS and paginating through all closed positions/trades.
+The edge function (`supabase/functions/polymarket-proxy`) proxies requests to Polymarket's API, handling CORS and recent pagination. Polymarket now caps historical `trades` pagination, so full wallet trade history is no longer recoverable from `data-api/trades` alone.
+
+For full trade history, use the on-chain downloader with an archive-capable Polygon RPC:
+
+```sh
+POLYGON_RPC_URL=https://your-archive-polygon-rpc
+npm run download:full-trades -- --wallet 0xYOUR_PROXY_WALLET --output ./artifacts/full-trades.json
+```
+
+The downloader scans Polymarket `OrderFilled` logs directly on Polygon, enriches token IDs from Gamma, and writes the raw on-chain fills as JSON or CSV.
 
 ## Setup
 
@@ -30,6 +39,7 @@ The edge function (`supabase/functions/polymarket-proxy`) proxies requests to Po
 npm install
 cp .env.example .env
 # Add Supabase credentials to .env
+# Add POLYGON_RPC_URL=<archive-capable Polygon RPC> for full trade history
 npm run dev
 ```
 
