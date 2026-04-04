@@ -48,8 +48,8 @@ interface TokenMetadata {
 
 const DEFAULT_RPC_URL = "";
 const DEFAULT_FETCH_TIMEOUT_MS = 60_000;
-const DEFAULT_RETRIES = 4;
-const DEFAULT_BLOCK_TIMESTAMP_CONCURRENCY = 128;
+const DEFAULT_RETRIES = 8;
+const DEFAULT_BLOCK_TIMESTAMP_CONCURRENCY = 48;
 
 let rpcId = 0;
 
@@ -153,6 +153,14 @@ function extractErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
+function getRetryDelayMs(error: unknown, attempt: number): number {
+  if (extractErrorMessage(error).includes("RPC HTTP 429")) {
+    return Math.min(5_000 * 2 ** (attempt - 1), 60_000);
+  }
+
+  return 500 * 2 ** (attempt - 1);
+}
+
 function parseProviderHint(error: unknown): { fromBlock: number; toBlock: number } | null {
   const match = extractErrorMessage(error).match(
     /Try with this block range \[(0x[0-9a-fA-F]+), (0x[0-9a-fA-F]+)\]/,
@@ -212,7 +220,7 @@ async function rpcCall<T>(
       throw error;
     }
 
-    await delay(500 * 2 ** (attempt - 1));
+    await delay(getRetryDelayMs(error, attempt));
     return rpcCall<T>(rpcUrl, method, params, attempt + 1);
   }
 }
