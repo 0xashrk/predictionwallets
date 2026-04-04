@@ -49,6 +49,7 @@ interface TokenMetadata {
 const DEFAULT_RPC_URL = "";
 const DEFAULT_FETCH_TIMEOUT_MS = 60_000;
 const DEFAULT_RETRIES = 4;
+const DEFAULT_BLOCK_TIMESTAMP_CONCURRENCY = 24;
 
 let rpcId = 0;
 
@@ -330,6 +331,31 @@ async function getBlockTimestamp(
   return timestamp;
 }
 
+async function populateBlockTimestamps(
+  rpcUrl: string,
+  blockNumbers: number[],
+  cache: Map<number, number>,
+): Promise<void> {
+  const pending = Array.from(new Set(blockNumbers)).filter(
+    (blockNumber) => !cache.has(blockNumber),
+  );
+  let nextIndex = 0;
+
+  async function worker(): Promise<void> {
+    while (nextIndex < pending.length) {
+      const blockNumber = pending[nextIndex];
+      nextIndex += 1;
+      await getBlockTimestamp(rpcUrl, blockNumber, cache);
+    }
+  }
+
+  const workerCount = Math.min(
+    DEFAULT_BLOCK_TIMESTAMP_CONCURRENCY,
+    pending.length,
+  );
+  await Promise.all(Array.from({ length: workerCount }, () => worker()));
+}
+
 async function fetchTokenMetadata(
   tokenIds: string[],
 ): Promise<Map<string, TokenMetadata>> {
@@ -493,14 +519,21 @@ async function scanChunkTrades(
     return Number(BigInt(left.logIndex)) - Number(BigInt(right.logIndex));
   });
 
+  const decodedLogs = sortedLogs.map((log) => decodeOrderFilledLog(log));
+  await populateBlockTimestamps(
+    options.rpcUrl,
+    decodedLogs.map((decoded) => decoded.blockNumber),
+    blockTimestampCache,
+  );
+
   const trades: FullTradeRow[] = [];
-  for (const log of sortedLogs) {
-    const decoded = decodeOrderFilledLog(log);
-    const timestamp = await getBlockTimestamp(
-      options.rpcUrl,
-      decoded.blockNumber,
-      blockTimestampCache,
-    );
+  for (const decoded of decodedLogs) {
+    const timestamp = blockTimestampCache.get(decoded.blockNumber);
+    if (timestamp == null) {
+      throw new Error(
+        `Missing timestamp for block ${decoded.blockNumber} after cache population`,
+      );
+    }
     trades.push(buildTradeRow(decoded, timestamp));
   }
 
