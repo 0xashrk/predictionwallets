@@ -1,0 +1,189 @@
+
+> wallet-tracker@0.0.0 download:full-trades
+> tsx scripts/download-full-trades.ts --wallet 0x2d8b401d2f0e6937afebf18e19e11ca568a5260a --from-block 79447156 --output ./artifacts/vidarx-full-trades-raw.json
+
+Scanning Polymarket fills for 0x2d8b401d2f0e6937afebf18e19e11ca568a5260a from block 79447156 to 85104195...
+  skipping 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 79447156-79697155: chunk already saved
+  skipping 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 79697156-79947155: chunk already saved
+  skipping 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 79947156-80197155: chunk already saved
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 80197156-80447155: 49596 fills
+  wrote 49596 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-80197156-80447155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 80447156-80697155: 707 fills
+  wrote 707 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-80447156-80697155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 80697156-80947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-80697156-80947155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 80947156-81197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-80947156-81197155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 81197156-81447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 81322156-81447155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 81197156-81447155: 128474 fills
+  wrote 128474 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-81197156-81447155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 81447156-81697155: 29377 fills
+  wrote 29377 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-81447156-81697155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 81697156-81947155: 2 fills
+  wrote 2 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-81697156-81947155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 81947156-82197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-81947156-82197155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82197156-82447155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-82197156-82447155.json
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82447156-82697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-82447156-82697155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82697156-82947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82822156-82947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82884656-82947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82915906-82947155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82697156-82947155: 69559 fills
+  wrote 69559 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-82697156-82947155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82947156-83197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82947156-83072155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82947156-83009655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83009656-83072155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83072156-83197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83072156-83134655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83072156-83103405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83103406-83134655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83134656-83197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83134656-83165905 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83134656-83150280 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83165906-83197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83165906-83181530 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83181531-83197155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 82947156-83197155: 506755 fills
+  wrote 506755 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-82947156-83197155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83197156-83447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83197156-83322155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83197156-83259655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83197156-83228405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83228406-83259655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83259656-83322155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83259656-83290905 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83322156-83447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83322156-83384655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83353406-83384655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83384656-83447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83415906-83447155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83197156-83447155: 397637 fills
+  wrote 397637 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-83197156-83447155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83447156-83697155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83447156-83572155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83447156-83509655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83447156-83478405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83509656-83572155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83572156-83697155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83572156-83634655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83634656-83697155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83665906-83697155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83447156-83697155: 375911 fills
+  wrote 375911 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-83447156-83697155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83697156-83947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83697156-83822155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83697156-83759655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83697156-83728405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83728406-83759655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83759656-83822155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83759656-83790905 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83790906-83822155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83822156-83947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83822156-83884655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83822156-83853405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83884656-83947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83884656-83915905 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83915906-83947155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83697156-83947155: 493142 fills
+  wrote 493142 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-83697156-83947155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83947156-84197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83947156-84072155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83947156-84009655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83947156-83978405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84009656-84072155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84009656-84040905 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84040906-84072155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84072156-84197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84072156-84134655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84072156-84103405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84103406-84134655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84134656-84197155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84134656-84165905 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 83947156-84197155: 454257 fills
+  wrote 454257 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-83947156-84197155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84197156-84447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84197156-84322155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84197156-84259655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84197156-84228405 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84228406-84259655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84259656-84322155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84259656-84290905 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84322156-84447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84322156-84384655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84384656-84447155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84384656-84415905 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84197156-84447155: 342647 fills
+  wrote 342647 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-84197156-84447155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84447156-84697155 after error: The operation was aborted due to timeout
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84572156-84697155 after error: The operation was aborted due to timeout
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84572156-84634655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84634656-84697155 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84447156-84697155: 162329 fills
+  wrote 162329 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-84447156-84697155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84697156-84947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84697156-84822155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84697156-84759655 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84822156-84947155 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84822156-84884655 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84697156-84947155: 215851 fills
+  wrote 215851 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-84697156-84947155.json
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84947156-85104195 after error: The operation was aborted due to timeout
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84947156-85025675 after error: RPC eth_getLogs failed: invalid params
+  splitting 0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 85025676-85104195 after error: RPC eth_getLogs failed: invalid params
+  0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e blocks 84947156-85104195: 127509 fills
+  wrote 127509 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e-84947156-85104195.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 79447156-79697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-79447156-79697155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 79697156-79947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-79697156-79947155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 79947156-80197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-79947156-80197155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 80197156-80447155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-80197156-80447155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 80447156-80697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-80447156-80697155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 80697156-80947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-80697156-80947155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 80947156-81197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-80947156-81197155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 81197156-81447155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-81197156-81447155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 81447156-81697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-81447156-81697155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 81697156-81947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-81697156-81947155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 81947156-82197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-81947156-82197155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 82197156-82447155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-82197156-82447155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 82447156-82697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-82447156-82697155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 82697156-82947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-82697156-82947155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 82947156-83197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-82947156-83197155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 83197156-83447155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-83197156-83447155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 83447156-83697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-83447156-83697155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 83697156-83947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-83697156-83947155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 83947156-84197155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-83947156-84197155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 84197156-84447155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-84197156-84447155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 84447156-84697155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-84447156-84697155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 84697156-84947155: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-84697156-84947155.json
+  0xc5d563a36ae78145c45a50134d48a1215220f80a blocks 84947156-85104195: 0 fills
+  wrote 0 trades to /Users/Ashwin/Documents/DevProjects/predictionwallets/artifacts/vidarx-full-trades-raw.json.parts/0xc5d563a36ae78145c45a50134d48a1215220f80a-84947156-85104195.json
+Error: Gamma metadata request failed: HTTP 422
+    at fetchTokenMetadata (/Users/Ashwin/Documents/DevProjects/predictionwallets/scripts/download-full-trades.ts:380:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async main (/Users/Ashwin/Documents/DevProjects/predictionwallets/scripts/download-full-trades.ts:650:9)

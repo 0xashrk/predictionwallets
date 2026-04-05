@@ -30,3 +30,7 @@ dist-ssr
 # Claude and Sisyphus
 .claude/
 .sisyphus/
+
+# Large local downloader scratch outputs
+artifacts/vidarx-full-trades-raw.json.parts/
+artifacts/vidarx-struct-trades.log

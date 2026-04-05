@@ -1,0 +1,14 @@
+{
+  "wallet_handle": "vidarx",
+  "proxy_wallet": "0x2d8b401d2f0e6937afebf18e19e11ca568a5260a",
+  "artifact_path": "artifacts/vidarx-full-trades-raw.json",
+  "format": "raw_onchain_fills",
+  "row_count": 3392259,
+  "file_size_bytes": 1397772009,
+  "first_timestamp": 1764015921,
+  "first_timestamp_iso": "2025-11-24T20:25:21Z",
+  "last_timestamp": 1775328417,
+  "last_timestamp_iso": "2026-04-04T18:46:57Z",
+  "first_block_number": 79455443,
+  "last_block_number": 85104190
+}

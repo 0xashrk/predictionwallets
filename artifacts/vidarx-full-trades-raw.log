@@ -1,0 +1,216 @@
+{"wallet": "0x2d8b401d2f0e6937afebf18e19e11ca568a5260a", "rpc": "https://gateway.tenderly.co/public/polygon", "fromBlock": 79447156, "toBlock": 85102758, "initialChunk": 250000}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 79447156, "toBlock": 79697155, "fills": 123}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 79697156, "toBlock": 79947155, "fills": 12319}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 79947156, "toBlock": 80197155, "fills": 26088}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 80197156, "toBlock": 80447155, "fills": 49596}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 80447156, "toBlock": 80697155, "fills": 707}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 80697156, "toBlock": 80947155, "fills": 0}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 80947156, "toBlock": 81197155, "fills": 0}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4d6f864, 0x4d90da9].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81197156, "toBlock": 81447155, "leftEnd": 81333673}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81197156, "toBlock": 81333673, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4d90daa, 0x4da6409].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81333674, "toBlock": 81447155, "leftEnd": 81421321}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81333674, "toBlock": 81421321, "fills": 49995}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81421322, "toBlock": 81447155, "fills": 28481}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81447156, "toBlock": 81697155, "fills": 29377}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81697156, "toBlock": 81947155, "fills": 2}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 81947156, "toBlock": 82197155, "fills": 0}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82197156, "toBlock": 82447155, "fills": 0}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82447156, "toBlock": 82697155, "fills": 0}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4eddbc4, 0x4f17b5a].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82697156, "toBlock": 82947155, "leftEnd": 82934618}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82697156, "toBlock": 82934618, "fills": 49998}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82934619, "toBlock": 82947155, "fills": 19561}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f1ac54, 0x4f229ac].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82947156, "toBlock": 83197155, "leftEnd": 82979244}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82947156, "toBlock": 82979244, "fills": 49999}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f229ad, 0x4f2e861].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82979245, "toBlock": 83197155, "leftEnd": 83028065}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 82979245, "toBlock": 83028065, "fills": 49997}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f2e862, 0x4f3854b].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83028066, "toBlock": 83197155, "leftEnd": 83068235}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83028066, "toBlock": 83068235, "fills": 49984}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f3854c, 0x4f3f678].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83068236, "toBlock": 83197155, "leftEnd": 83097208}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83068236, "toBlock": 83097208, "fills": 49987}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f3f679, 0x4f4549d].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83097209, "toBlock": 83197155, "leftEnd": 83121309}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83097209, "toBlock": 83121309, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f4549e, 0x4f4975a].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83121310, "toBlock": 83197155, "leftEnd": 83138394}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83121310, "toBlock": 83138394, "fills": 49999}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f4975b, 0x4f4c803].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83138395, "toBlock": 83197155, "leftEnd": 83150851}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83138395, "toBlock": 83150851, "fills": 49995}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f4c804, 0x4f508d8].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83150852, "toBlock": 83197155, "leftEnd": 83167448}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83150852, "toBlock": 83167448, "fills": 49996}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f508d9, 0x4f540fc].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83167449, "toBlock": 83197155, "leftEnd": 83181820}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83167449, "toBlock": 83181820, "fills": 49975}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f540fd, 0x4f57474].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83181821, "toBlock": 83197155, "leftEnd": 83194996}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83181821, "toBlock": 83194996, "fills": 49995}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83194997, "toBlock": 83197155, "fills": 6830}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f57ce4, 0x4f5e04b].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83197156, "toBlock": 83447155, "leftEnd": 83222603}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83197156, "toBlock": 83222603, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f5e04c, 0x4f65bde].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83222604, "toBlock": 83447155, "leftEnd": 83254238}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83222604, "toBlock": 83254238, "fills": 49996}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f65bdf, 0x4f6c4da].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83254239, "toBlock": 83447155, "leftEnd": 83281114}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83254239, "toBlock": 83281114, "fills": 49997}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f6c4db, 0x4f76453].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83281115, "toBlock": 83447155, "leftEnd": 83321939}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83281115, "toBlock": 83321939, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f76454, 0x4f7f850].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83321940, "toBlock": 83447155, "leftEnd": 83359824}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83321940, "toBlock": 83359824, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f7f851, 0x4f867d5].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83359825, "toBlock": 83447155, "leftEnd": 83388373}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83359825, "toBlock": 83388373, "fills": 49994}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f867d6, 0x4f8fa11].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83388374, "toBlock": 83447155, "leftEnd": 83425809}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83388374, "toBlock": 83425809, "fills": 49992}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83425810, "toBlock": 83447155, "fills": 47664}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f94d74, 0x4f9b341].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83447156, "toBlock": 83697155, "leftEnd": 83473217}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83447156, "toBlock": 83473217, "fills": 49996}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4f9b342, 0x4fa1f4a].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83473218, "toBlock": 83697155, "leftEnd": 83500874}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83473218, "toBlock": 83500874, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fa1f4b, 0x4fad9bf].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83500875, "toBlock": 83697155, "leftEnd": 83548607}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83500875, "toBlock": 83548607, "fills": 49996}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fad9c0, 0x4fb6908].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83548608, "toBlock": 83697155, "leftEnd": 83585288}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83548608, "toBlock": 83585288, "fills": 49986}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fb6909, 0x4fc0b7f].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83585289, "toBlock": 83697155, "leftEnd": 83626879}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83585289, "toBlock": 83626879, "fills": 49990}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fc0b80, 0x4fca6c5].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83626880, "toBlock": 83697155, "leftEnd": 83666629}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83626880, "toBlock": 83666629, "fills": 49987}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fca6c6, 0x4fceffc].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83666630, "toBlock": 83697155, "leftEnd": 83685372}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83666630, "toBlock": 83685372, "fills": 49999}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83685373, "toBlock": 83697155, "fills": 25959}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fd1e04, 0x4fd6d1c].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83697156, "toBlock": 83947155, "leftEnd": 83717404}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83697156, "toBlock": 83717404, "fills": 49993}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fd6d1d, 0x4fdd76f].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83717405, "toBlock": 83947155, "leftEnd": 83744623}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83717405, "toBlock": 83744623, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fdd770, 0x4fe298e].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83744624, "toBlock": 83947155, "leftEnd": 83765646}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83744624, "toBlock": 83765646, "fills": 49995}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fe298f, 0x4fe9643].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83765647, "toBlock": 83947155, "leftEnd": 83793475}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83765647, "toBlock": 83793475, "fills": 49991}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fe9644, 0x4fef22d].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83793476, "toBlock": 83947155, "leftEnd": 83817005}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83793476, "toBlock": 83817005, "fills": 49981}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4fef22e, 0x4ff504a].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83817006, "toBlock": 83947155, "leftEnd": 83841098}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83817006, "toBlock": 83841098, "fills": 49984}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4ff504b, 0x4ffcf13].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83841099, "toBlock": 83947155, "leftEnd": 83873555}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83841099, "toBlock": 83873555, "fills": 49995}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x4ffcf14, 0x5003853].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83873556, "toBlock": 83947155, "leftEnd": 83900499}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83873556, "toBlock": 83900499, "fills": 49994}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x5003854, 0x500a64c].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83900500, "toBlock": 83947155, "leftEnd": 83928652}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83900500, "toBlock": 83928652, "fills": 49973}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83928653, "toBlock": 83947155, "fills": 43238}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x500ee94, 0x5014d1d].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83947156, "toBlock": 84197155, "leftEnd": 83971357}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83947156, "toBlock": 83971357, "fills": 49991}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x5014d1e, 0x501cbb6].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83971358, "toBlock": 84197155, "leftEnd": 84003766}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 83971358, "toBlock": 84003766, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x501cbb7, 0x5021a50].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84003767, "toBlock": 84197155, "leftEnd": 84023888}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84003767, "toBlock": 84023888, "fills": 49999}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x5021a51, 0x502880e].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84023889, "toBlock": 84197155, "leftEnd": 84051982}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84023889, "toBlock": 84051982, "fills": 49975}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x502880f, 0x502f979].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84051983, "toBlock": 84197155, "leftEnd": 84081017}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84051983, "toBlock": 84081017, "fills": 49992}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x502f97a, 0x503662e].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84081018, "toBlock": 84197155, "leftEnd": 84108846}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84081018, "toBlock": 84108846, "fills": 49987}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x503662f, 0x503ddec].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84108847, "toBlock": 84197155, "leftEnd": 84139500}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84108847, "toBlock": 84139500, "fills": 49996}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x503dded, 0x50429e4].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84139501, "toBlock": 84197155, "leftEnd": 84158948}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84139501, "toBlock": 84158948, "fills": 49993}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x50429e5, 0x504b307].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84158949, "toBlock": 84197155, "leftEnd": 84194055}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84158949, "toBlock": 84194055, "fills": 49988}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84194056, "toBlock": 84197155, "fills": 4338}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x504bf24, 0x505329a].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84197156, "toBlock": 84447155, "leftEnd": 84226714}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84197156, "toBlock": 84226714, "fills": 49999}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x505329b, 0x5058f16].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84226715, "toBlock": 84447155, "leftEnd": 84250390}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84226715, "toBlock": 84250390, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x5058f17, 0x505e5a0].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84250391, "toBlock": 84447155, "leftEnd": 84272544}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84250391, "toBlock": 84272544, "fills": 49998}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x505e5a1, 0x506c93d].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84272545, "toBlock": 84447155, "leftEnd": 84330813}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84272545, "toBlock": 84330813, "fills": 49997}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x506c93e, 0x50757f8].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84330814, "toBlock": 84447155, "leftEnd": 84367352}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84330814, "toBlock": 84367352, "fills": 49999}
+{"retry": 1, "method": "eth_getLogs", "error": "{'code': -32602, 'message': 'invalid params', 'data': 'Query returned more than 50000 results. Try with this block range [0x50757f9, 0x507e1e7].'}"}
+{"split": "provider_hint", "exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84367353, "toBlock": 84447155, "leftEnd": 84402663}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84367353, "toBlock": 84402663, "fills": 49996}
+{"exchange": "0x4bfb41d5b3570defd03c39a9a4d8de6bd8b8982e", "fromBlock": 84402664, "toBlock": 84447155, "fills": 42660}
+{"retry": 1, "method": "eth_getLogs", "error": "The read operation timed out"}
+Traceback (most recent call last):
+  File "<stdin>", line 127, in <module>
+  File "<stdin>", line 41, in fetch_logs
+  File "<stdin>", line 37, in rpc_call
+  File "<stdin>", line 27, in rpc_call
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 487, in open
+    response = self._open(req, data)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 504, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 1369, in https_open
+    return self.do_open(http.client.HTTPSConnection, req,
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                        context=self._context)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/urllib/request.py", line 1325, in do_open
+    r = h.getresponse()
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 1450, in getresponse
+    response.begin()
+    ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 336, in begin
+    version, status, reason = self._read_status()
+                              ~~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/client.py", line 297, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socket.py", line 725, in readinto
+    return self._sock.recv_into(b)
+           ~~~~~~~~~~~~~~~~~~~~^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ssl.py", line 1304, in recv_into
+    return self.read(nbytes, buffer)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.14/3.14.2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/ssl.py", line 1138, in read
+    return self._sslobj.read(len, buffer)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+TimeoutError: The read operation timed out

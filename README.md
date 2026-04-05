@@ -34,6 +34,15 @@ npm run download:full-trades -- --wallet 0xYOUR_PROXY_WALLET --output ./artifact
 The downloader scans Polymarket `OrderFilled` logs directly on Polygon, enriches token IDs from Gamma, and writes the raw on-chain fills as JSON or CSV.
 It also checkpoints per block range under `<output>.parts/`, so reruns resume from completed chunks instead of starting from zero after an RPC timeout.
 
+If you have Struct API access, there is also a cleaner full-history lane that avoids the public Polymarket wallet cap:
+
+```sh
+STRUCTBUILD_API_KEY=your-struct-key \
+npm run download:struct-trades -- --wallet 0xYOUR_PROXY_WALLET --output ./artifacts/struct-trades.csv
+```
+
+This downloader paginates `trader.getTraderTrades(...)` with `all=true` through the Struct SDK and emits flattened JSON or CSV rows with market metadata already attached.
+
 ## Setup
 
 ```sh
@@ -41,6 +50,7 @@ npm install
 cp .env.example .env
 # Add Supabase credentials to .env
 # Add POLYGON_RPC_URL=<archive-capable Polygon RPC> for full trade history
+# Add STRUCTBUILD_API_KEY=<Struct API key> for Struct-backed trade history
 npm run dev
 ```
 

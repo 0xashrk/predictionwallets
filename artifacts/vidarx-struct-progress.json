@@ -1,0 +1,15 @@
+{
+  "wallet_handle": "vidarx",
+  "proxy_wallet": "0x2d8b401d2f0e6937afebf18e19e11ca568a5260a",
+  "artifact_path": "artifacts/vidarx-struct-trades.json",
+  "format": "struct_labeled_trades_progress_snapshot",
+  "snapshot_reason": "full Struct export is still running in the background and only writes the final JSON at completion",
+  "log_exists": true,
+  "page_rows": 250,
+  "pages_seen": 3139,
+  "last_offset": 784500,
+  "last_page_count": 250,
+  "lower_bound_rows_fetched": 784750,
+  "export_process_pid": 97847,
+  "export_process_etime": "49:42"
+}
